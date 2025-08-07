@@ -1,0 +1,35 @@
+//
+//  Generated file. Do not edit.
+//
+
+// clang-format off
+
+#include "generated_plugin_registrant.h"
+
+#include <bigbluebuttonsdk/bigbluebuttonsdk_plugin.h>
+#include <emoji_picker_flutter/emoji_picker_flutter_plugin.h>
+#include <flutter_webrtc/flutter_web_r_t_c_plugin.h>
+#include <konn3ctsdk/konn3ctsdk_plugin.h>
+#include <open_file_linux/open_file_linux_plugin.h>
+#include <screen_capturer_linux/screen_capturer_linux_plugin.h>
+
+void fl_register_plugins(FlPluginRegistry* registry) {
+  g_autoptr(FlPluginRegistrar) bigbluebuttonsdk_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "BigbluebuttonsdkPlugin");
+  bigbluebuttonsdk_plugin_register_with_registrar(bigbluebuttonsdk_registrar);
+  g_autoptr(FlPluginRegistrar) emoji_picker_flutter_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "EmojiPickerFlutterPlugin");
+  emoji_picker_flutter_plugin_register_with_registrar(emoji_picker_flutter_registrar);
+  g_autoptr(FlPluginRegistrar) flutter_webrtc_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "FlutterWebRTCPlugin");
+  flutter_web_r_t_c_plugin_register_with_registrar(flutter_webrtc_registrar);
+  g_autoptr(FlPluginRegistrar) konn3ctsdk_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "Konn3ctsdkPlugin");
+  konn3ctsdk_plugin_register_with_registrar(konn3ctsdk_registrar);
+  g_autoptr(FlPluginRegistrar) open_file_linux_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "OpenFileLinuxPlugin");
+  open_file_linux_plugin_register_with_registrar(open_file_linux_registrar);
+  g_autoptr(FlPluginRegistrar) screen_capturer_linux_registrar =
+      fl_plugin_registry_get_registrar_for_plugin(registry, "ScreenCapturerLinuxPlugin");
+  screen_capturer_linux_plugin_register_with_registrar(screen_capturer_linux_registrar);
+}
