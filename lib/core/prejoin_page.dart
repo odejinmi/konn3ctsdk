@@ -13,6 +13,7 @@ class prejoinPage extends GetView<postjoinController> {
   @override
   Widget build(BuildContext context) {
     controller.formKey = GlobalKey<FormState>();
+    controller.context = context;
     // return buildDefault(context);
     return Scaffold(
       backgroundColor: const Color.fromRGBO(229, 229, 229, 1),
@@ -28,7 +29,7 @@ class prejoinPage extends GetView<postjoinController> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 150),
+                    const SizedBox(height: 80),
                     const Text(
                       'Get Started',
                       style: TextStyle(
@@ -70,14 +71,7 @@ class prejoinPage extends GetView<postjoinController> {
                         color: const Color.fromRGBO(185, 201, 194, 1),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child:
-                          controller.isvideo &&
-                              controller.cameracontroller != null &&
-                              controller
-                                      .cameracontroller
-                                      ?.value
-                                      .isInitialized ==
-                                  true
+                      child: controller.isvideo
                           ? SizedBox(
                               height: double.infinity,
                               width: double.infinity,
@@ -170,8 +164,17 @@ class prejoinPage extends GetView<postjoinController> {
                             ),
                             SizedBox(width: 20),
                             IconButton.filled(
-                              onPressed: () {
-                                controller.isvideo = !controller.isvideo;
+                              onPressed: () async {
+                                if (GetPlatform.isAndroid ||
+                                    GetPlatform.isIOS) {
+                                  if (controller.isvideo) {
+                                    controller.isvideo = await controller
+                                        .closeCamera();
+                                  } else {
+                                    controller.isvideo = await controller
+                                        .startCamera();
+                                  }
+                                }
                               },
                               icon: const Icon(Icons.videocam_off_outlined),
                               style: ButtonStyle(
@@ -428,6 +431,7 @@ class prejoinPage extends GetView<postjoinController> {
                                   // const SizedBox(width: 10,),
                                 ],
                               ),
+                              SizedBox(height: 30),
                             ],
                           )
                         : Column(

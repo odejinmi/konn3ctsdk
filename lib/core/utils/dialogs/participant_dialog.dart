@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/modal/changeroledialog.dart';
 import 'package:konn3ctsdk/core/postjoin_module/modal/removeuserdialog.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 import 'chat.dart';
 
@@ -203,126 +204,167 @@ class _ParticipantsDialogState extends State<ParticipantsDialog> {
                                   .fields!
                                   .role ==
                               "MODERATOR")
-                            PopupMenuButton(
-                              color: const Color.fromRGBO(93, 149, 126, 1),
-                              icon: const Icon(
-                                Icons.more_vert,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                              onSelected: (value) {
-                                if (value == 1) {
-                                  _showChangeRoleDialog(participan);
-                                } else if (value == 2) {
-                                  postjoincontroller.bigbluebuttonsdkPlugin
-                                      .muteallusers(
-                                        userid: participan.fields!.userId!,
-                                      );
-                                  // put function here
-                                } else if (value == 3) {
-                                  if (participan.fields!.chatId == null) {
-                                    postjoincontroller.bigbluebuttonsdkPlugin
-                                        .createGroupChat(
-                                          participant: participan,
-                                        );
-                                  }
-                                  showGeneralDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    barrierColor: Colors.transparent,
-                                    transitionDuration: const Duration(
-                                      milliseconds: 400,
-                                    ),
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) {
-                                          return ChatDialog(
-                                            participant: participan,
+                            GetBuilder<Websocket>(
+                              builder: (logic) {
+                                return PopupMenuButton(
+                                  color: const Color.fromRGBO(93, 149, 126, 1),
+                                  icon: const Icon(
+                                    Icons.more_vert,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  onSelected: (value) {
+                                    if (value == 1) {
+                                      _showChangeRoleDialog(participan);
+                                    } else if (value == 2) {
+                                      postjoincontroller.bigbluebuttonsdkPlugin
+                                          .muteallusers(
+                                            userid: participan.fields!.userId!,
                                           );
-                                        },
-                                  );
-                                  // put function here
-                                } else if (value == 4) {
-                                  _showRemoveUserDialog(participan);
-                                }
-                              },
-                              itemBuilder: (BuildContext bc) {
-                                return [
-                                  const PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.repeat,
-                                          color: Colors.white,
-                                          size: 20,
+                                      // put function here
+                                    } else if (value == 3) {
+                                      if (logic
+                                              .meetingResponse
+                                              ?.fields
+                                              .lockSettingsProps
+                                              .disablePrivateChat ??
+                                          false) {
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              "Your Private Chat has been disabled by the Moderator",
+                                            ),
+                                            backgroundColor: Colors.red,
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      if (participan.fields!.chatId == null) {
+                                        postjoincontroller
+                                            .bigbluebuttonsdkPlugin
+                                            .createGroupChat(
+                                              participant: participan,
+                                            );
+                                      }
+                                      showGeneralDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        barrierColor: Colors.transparent,
+                                        transitionDuration: const Duration(
+                                          milliseconds: 400,
                                         ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          "Change Role",
-                                          style: TextStyle(color: Colors.white),
+                                        pageBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                            ) {
+                                              return ChatDialog(
+                                                participant: participan,
+                                              );
+                                            },
+                                      );
+                                      // put function here
+                                    } else if (value == 4) {
+                                      _showRemoveUserDialog(participan);
+                                    }
+                                  },
+                                  itemBuilder: (BuildContext bc) {
+                                    return [
+                                      const PopupMenuItem(
+                                        value: 1,
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.repeat,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "Change Role",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
 
-                                  PopupMenuItem(
-                                    value: 2,
-                                    onTap: () {},
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.volume_mute,
-                                          color: Colors.white,
-                                          size: 20,
+                                      PopupMenuItem(
+                                        value: 2,
+                                        onTap: () {},
+                                        child: const Row(
+                                          children: [
+                                            Icon(
+                                              Icons.volume_mute,
+                                              color: Colors.white,
+                                              size: 20,
+                                            ),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              "Mute User",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          "Mute User",
-                                          style: TextStyle(color: Colors.white),
+                                      ),
+                                      if (participan.id !=
+                                          postjoincontroller
+                                              .bigbluebuttonsdkPlugin
+                                              .mydetails
+                                              .id)
+                                        PopupMenuItem(
+                                          value: 3,
+                                          onTap: () {},
+                                          child: const Row(
+                                            children: [
+                                              Icon(
+                                                Icons.chat_bubble_outline,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                              SizedBox(width: 8),
+                                              Text(
+                                                "Private Chat",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 3,
-                                    onTap: () {},
-                                    child: const Row(
-                                      children: [
-                                        Icon(
-                                          Icons.chat_bubble_outline,
-                                          color: Colors.white,
-                                          size: 20,
+                                      if (participan.id !=
+                                          postjoincontroller
+                                              .bigbluebuttonsdkPlugin
+                                              .mydetails
+                                              .id)
+                                        const PopupMenuItem(
+                                          value: 4,
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                Icons.person_remove,
+                                                color: Colors.white,
+                                                size: 20,
+                                              ),
+                                              SizedBox(width: 8),
+                                              Text(
+                                                "Remove User",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          "Private Chat",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const PopupMenuItem(
-                                    value: 4,
-                                    child: Row(
-                                      children: [
-                                        Icon(
-                                          Icons.person_remove,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          "Remove User",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ];
+                                    ];
+                                  },
+                                );
                               },
                             ),
                         ],

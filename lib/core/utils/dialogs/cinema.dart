@@ -342,6 +342,7 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
 
                                 _enableFullscreen(true);
                                 Navigator.pop(context);
+                                Navigator.pop(context);
                                 postjoincontroller.bigbluebuttonsdkPlugin
                                     .endecinema();
                               },

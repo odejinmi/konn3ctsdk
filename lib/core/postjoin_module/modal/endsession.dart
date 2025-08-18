@@ -96,7 +96,7 @@ class Endsession extends StatelessWidget {
                           'Don’t End',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.9800000190734863),
+                            color: Colors.white.withOpacity(0.98),
                             fontSize: 16,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w600,
@@ -105,11 +105,12 @@ class Endsession extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 16),
-                    InkWell(
-                      onTap: () {
-                        logic.bigbluebuttonsdkPlugin.endroom();
-                      },
-                      child: Expanded(
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          logic.bigbluebuttonsdkPlugin.endroom();
+                        },
                         child: Container(
                           height: double.infinity,
                           padding: const EdgeInsets.symmetric(
@@ -130,13 +131,12 @@ class Endsession extends StatelessWidget {
                             'End Session',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.white.withOpacity(
-                                0.9800000190734863,
-                              ),
+                              color: Colors.white.withOpacity(0.98),
                               fontSize: 16,
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w600,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ),

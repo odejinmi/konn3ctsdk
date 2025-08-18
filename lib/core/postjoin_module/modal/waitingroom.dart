@@ -354,7 +354,10 @@ class Waitingroom extends GetView<postjoinController> {
                     )
                   else
                     Container(
-                      child: Text("This page can only be seen by a Moderator"),
+                      child: Text(
+                        "This page can only be seen by a Moderator",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                 ],
               ),

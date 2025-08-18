@@ -16,6 +16,10 @@ class postjoinPage extends GetView<postjoinController> {
   @override
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
+    controller.context = context;
+    if (GetPlatform.isAndroid) {
+      controller.enablePip(autoEnable: true, context: context);
+    }
     return Obx(() {
       controller.zoomLevel;
       return PopScope(
@@ -29,14 +33,13 @@ class postjoinPage extends GetView<postjoinController> {
               builder: (BuildContext context) => AlertDialog(
                 backgroundColor: Color(0xFF3E8466),
                 content:
-                controller.bigbluebuttonsdkPlugin.mydetails !=
-                    null &&
-                    controller
-                        .bigbluebuttonsdkPlugin
-                        .mydetails!
-                        .fields!
-                        .role ==
-                        "MODERATOR"
+                    controller.bigbluebuttonsdkPlugin.mydetails != null &&
+                        controller
+                                .bigbluebuttonsdkPlugin
+                                .mydetails!
+                                .fields!
+                                .role ==
+                            "MODERATOR"
                     ? Endroom()
                     : Leavesession(),
               ),

@@ -30,6 +30,10 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   set obj(value) => _obj.value = value;
   get obj => _obj.value;
 
+  final _context = Rx<BuildContext?>(null);
+  set context(value) => _context.value = value;
+  get context => _context.value;
+
   final _baseurl = 'meet.konn3ct.ng/'.obs;
   set baseurl(value) {
     entermeetingurl = 'https://${value}bigbluebutton/api/enter?sessionToken=';
@@ -53,7 +57,15 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   var switchcontroller = Get.put(SwitchController());
 
   final _stage = 0.obs;
-  set stage(value) => _stage.value = value;
+  set stage(value) {
+    if (value == 1) {
+      closeCamera();
+    } else {
+      stopfloating();
+    }
+    return _stage.value = value;
+  }
+
   get stage => _stage.value;
 
   final _isleaving = false.obs;
@@ -178,7 +190,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     // controller.slideposition =
-
     isleaving = false;
 
     if (GetPlatform.isAndroid || GetPlatform.isIOS) {
@@ -190,9 +201,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     // Create a new subscription
     // sdklistener();
 
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      requestCameraPermission();
-    }
     // TODO: implement onInit
     super.onInit();
   }
@@ -222,14 +230,16 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
                   response["fields"]["loggedOut"] != null &&
                   response["fields"]["loggedOut"])) {
             stage = 0;
-            Get.back(result: isleaving);
+            Navigator.pop(context, isleaving);
           }
           break;
         case "external-video-meetings":
           if (response["fields"] != null &&
               response["fields"]["externalVideoUrl"] != null) {
-            await Get.to(
-              ShowVideoScreen(
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) => ShowVideoScreen(
                 videoLink: response,
                 ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
               ),
@@ -243,7 +253,12 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
                 currentId != pullcontroller.lastPollId) {
               pullcontroller.ispulling = true;
               pullcontroller.lastPollId = currentId;
-              Get.bottomSheet(Pullquestionandanswer(json: response));
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) =>
+                    Pullquestionandanswer(json: response),
+              );
             }
           } else if (response["msg"] == "removed") {
             pullcontroller.ispulling = false;
@@ -253,7 +268,11 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
         case "current-poll":
           if (response["msg"] == "added") {
             pullcontroller.pullresult = response;
-            Get.bottomSheet(Pollsresult(json: response)).then((value) {
+            showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) => Pollsresult(json: response),
+            ).then((value) {
               Future.delayed(const Duration(seconds: 3), () {
                 pullcontroller.pullresult = {};
               });
@@ -380,30 +399,15 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     });
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed ||
-        state == AppLifecycleState.detached) {
-      isfloating.value = false;
-    } else {
-      isfloating.value = true;
-      try {
-        enablePip();
-      } catch ($e) {
-        print("Error while enabling pip");
-      }
-    }
-    // _isInForeground = state == AppLifecycleState.resumed;
-  }
-
   final floating = Floating();
 
-  Future<void> enablePip({bool autoEnable = false}) async {
+  Future<void> enablePip({
+    bool autoEnable = false,
+    required BuildContext context,
+  }) async {
     final rational = Rational.landscape();
     final screenSize =
-        MediaQuery.of(Get.context!).size *
-        MediaQuery.of(Get.context!).devicePixelRatio;
+        MediaQuery.of(context).size * MediaQuery.of(context).devicePixelRatio;
     final height = screenSize.width ~/ rational.aspectRatio;
 
     final arguments = autoEnable
@@ -439,6 +443,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   @override
   void onClose() {
     _timer?.cancel();
+    stopfloating();
     closeCamera();
     // TODO: implement onClose
     super.onClose();
@@ -468,12 +473,12 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       token,
     );
     if (cmddetails["success"]) {
-      if (cmddetails["data"].isNotEmpty) {
-        donate = true;
-        donationdetails = cmddetails["data"];
-      } else {
-        donate = false;
-      }
+      // if (cmddetails["data"].isNotEmpty) {
+      //   donate = true;
+      //   donationdetails = cmddetails["data"];
+      // } else {
+      //   donate = false;
+      // }
       // Get.offNamed(
       // Routes.POSTJOIN, arguments: {"token": webtoken,"meetingdetails":cmddetails["response"]});
       // update();
@@ -485,6 +490,8 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       "k4/donation/${roomdetails['id']}",
       token,
     );
+    print("donation cmddetails");
+    print(cmddetails);
     if (cmddetails["success"]) {
       if (cmddetails["data"].isNotEmpty) {
         donate = true;
@@ -572,11 +579,15 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     thirdDropdownValue = thirdItemsDropdown.first;
   }
 
+  stopfloating() {
+    floating.cancelOnLeavePiP();
+  }
+
   final _accesscode = false.obs;
   set accesscode(value) => _accesscode.value = value;
   get accesscode => _accesscode.value;
 
-  final _isvideo = true.obs;
+  final _isvideo = false.obs;
   set isvideo(value) => _isvideo.value = value;
   get isvideo => _isvideo.value;
 
@@ -608,39 +619,78 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   bool isAudio = true;
   bool IsVideo = true;
 
-  Future<void> initializeCameras() async {
-    cameras = await availableCameras();
-    if (cameras.length > 1) {
-      cameracontroller = CameraController(
-        cameras[1],
-        ResolutionPreset.max,
-        enableAudio: isAudio,
-      );
-    } else {
-      cameracontroller = CameraController(
-        cameras[0],
-        ResolutionPreset.max,
-        enableAudio: isAudio,
-      );
-    }
+  Future<bool> startCamera() async {
+    try {
+      // First check if we have camera permission
+      final status = await Permission.camera.status;
+      if (!status.isGranted) {
+        final result = await Permission.camera.request();
+        if (!result.isGranted) {
+          return false;
+        }
+      }
 
-    cameracontroller
-        ?.initialize()
-        .then((_) {
-          initializeControllerFuture = cameracontroller?.initialize();
-        })
-        .catchError((Object e) {
-          if (e is CameraException) {
-            switch (e.code) {
-              case 'CameraAccessDenied':
-                // Handle access errors here.
-                break;
-              default:
-                // Handle other errors here.
-                break;
-            }
-          }
-        });
+      // Get available cameras
+      cameras = await availableCameras();
+      if (cameras.isEmpty) {
+        debugPrint('No cameras found');
+        return false;
+      }
+
+      // Initialize the camera
+      cameracontroller = CameraController(
+        cameras.length > 1 ? cameras[1] : cameras[0],
+        ResolutionPreset.max,
+        enableAudio: isaudio,
+      );
+
+      await cameracontroller?.initialize();
+      obj = "kjhg";
+      update(); // Notify listeners that the state has changed
+      return true;
+    } catch (e) {
+      debugPrint('Error initializing camera: $e');
+      if (e is CameraException) {
+        switch (e.code) {
+          case 'CameraAccessDenied':
+            debugPrint('Camera access was denied');
+            break;
+          case 'CameraAccessDeniedWithoutPrompt':
+            debugPrint('Camera access was denied without prompt');
+            break;
+          case 'CameraAccessRestricted':
+            debugPrint('Camera access is restricted');
+            break;
+          default:
+            debugPrint('Camera error: ${e.description}');
+            break;
+        }
+      }
+      return false;
+    }
+  }
+
+  Future<void> toggleCamera() async {
+    if (cameracontroller != null && cameracontroller!.value.isInitialized) {
+      await closeCamera();
+      isvideo = false;
+    } else {
+      final success = await startCamera();
+      isvideo = success;
+    }
+    update();
+  }
+
+  // Method to close the camera and release resources
+  Future<bool> closeCamera() async {
+    if (cameracontroller != null) {
+      await cameracontroller!.dispose();
+      cameracontroller = null;
+      update();
+      return false;
+    } else {
+      return true;
+    }
   }
 
   Future<void> waiting(String data) async {
@@ -670,32 +720,18 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     print("validateMeeting initiated");
 
     isLoading = true;
-    var json_body;
-    if (accesscode) {
-      // json_body = {
-      //   "id": roomdetails['id'],
-      //   "name": usernameController.text,
-      //   "email": emailController.text,
-      //   "access_code": accesscodeController.text
-      // };
-      json_body = {
-        "room": roomdetails["name"],
-        "name": usernameController.text,
-        "email": emailController.text,
-        "access_code": accesscodeController.text,
-      };
-    } else {
-      // json_body = {
-      //   "id": "0${roomdetails['id']}",
-      //   "name": usernameController.text,
-      //   "email": emailController.text
-      // };
-      json_body = {
-        "room": roomdetails["name"],
-        "name": usernameController.text,
-        "email": emailController.text,
-      };
-    }
+    //var json_body = {
+    //   "id": roomdetails['id'],
+    //   "name": usernameController.text,
+    //   "email": emailController.text,
+    //   "access_code": accesscodeController.text
+    // };
+    var json_body = {
+      "room": roomdetails["name"],
+      "name": usernameController.text,
+      "email": emailController.text,
+      "access_code": accesscodeController.text,
+    };
 
     // var cmddetails = await Diorequest().post("app/join-room",json_body);
     var cmddetails = await Diorequest().post(
@@ -789,23 +825,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
         print("start the meeting again");
       }
     } on Exception {}
-  }
-
-  Future<void> requestCameraPermission() async {
-    if (await Permission.camera.request().isGranted) {
-      // Permission granted, proceed with camera functionality
-      initializeCameras();
-    } else {
-      // Handle permission denial
-    }
-  }
-
-  // Method to close the camera and release resources
-  Future<void> closeCamera() async {
-    if (cameracontroller != null && cameracontroller!.value.isInitialized) {
-      await cameracontroller!.dispose();
-      cameracontroller = null;
-    }
   }
 
   static const Color red = Color(0xFFFF0000);

@@ -3,15 +3,14 @@ import 'package:bigbluebuttonsdk/utils/presentationmodel.dart' as presentation;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:konn3ctsdk/core/utils/state_mgt/PresentationController.dart';
 
-import '../postjoin_controller.dart';
-
-class Presentation extends StatelessWidget {
+class Presentation extends GetView<PresentationController> {
   const Presentation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var postjoincontroller = Get.put(postjoinController());
+    // var postjoincontroller = Get.put(postjoinController());
     return GetBuilder<Websocket>(
       builder: (logic) {
         return Container(
@@ -26,7 +25,7 @@ class Presentation extends StatelessWidget {
                       'Presentation',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 24,
+                        fontSize: 20,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600,
                       ),
@@ -39,8 +38,8 @@ class Presentation extends StatelessWidget {
                       child: Container(
                         height: 48,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                          horizontal: 14,
+                          vertical: 10,
                         ),
                         decoration: ShapeDecoration(
                           shape: RoundedRectangleBorder(
@@ -66,24 +65,20 @@ class Presentation extends StatelessWidget {
                     SizedBox(width: 10),
                     InkWell(
                       onTap: () {
-                        if (postjoincontroller.selecttoupload.name.isNotEmpty &&
-                            postjoincontroller.selecttoupload.size != 0) {
-                          postjoincontroller.bigbluebuttonsdkPlugin
-                              .uploadpresenter(
-                                filename: postjoincontroller.selecttoupload,
-                              );
-                          postjoincontroller.toupload.remove(
-                            postjoincontroller.selecttoupload,
+                        if (controller.selecttoupload.name.isNotEmpty &&
+                            controller.selecttoupload.size != 0) {
+                          controller.bigbluebuttonsdkPlugin.uploadpresenter(
+                            filename: controller.selecttoupload,
                           );
-                        } else if (postjoincontroller.selecttoupload.size ==
-                            0) {
+                          controller.toupload.remove(controller.selecttoupload);
+                        } else if (controller.selecttoupload.size == 0) {
                           // Find and remove the item
                           var result = logic.presentationmodel.where((v) {
                             return v.fields!.name! ==
-                                postjoincontroller.selecttoupload.name!;
+                                controller.selecttoupload.name!;
                           }).toList();
                           if (result.isNotEmpty) {
-                            postjoincontroller.bigbluebuttonsdkPlugin
+                            controller.bigbluebuttonsdkPlugin
                                 .makepresentationdefault(
                                   presentation: result.first.toJson(),
                                 );
@@ -94,8 +89,8 @@ class Presentation extends StatelessWidget {
                       child: Container(
                         height: 48,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                          horizontal: 14,
+                          vertical: 10,
                         ),
                         decoration: ShapeDecoration(
                           color: Color(0xFF5D957E),
@@ -183,27 +178,25 @@ class Presentation extends StatelessWidget {
                 //     );
                 //   },
                 // ),
-                GetBuilder<postjoinController>(
-                  builder: (controller) {
-                    return Column(
-                      children: [
-                        for (int i = 0; i < logic.presentationmodel.length; i++)
-                          item(logic.presentationmodel[i], 0, ""),
-                        for (int i = 0; i < controller.toupload.length; i++)
-                          item(
-                            presentation.Presentationmodel(
-                              fields: presentation.Fields(
-                                name: controller.toupload[i].name,
-                                current: false,
-                              ),
+                Obx(() {
+                  return Column(
+                    children: [
+                      for (int i = 0; i < logic.presentationmodel.length; i++)
+                        item(logic.presentationmodel[i], 0, ""),
+                      for (int i = 0; i < controller.toupload.length; i++)
+                        item(
+                          presentation.Presentationmodel(
+                            fields: presentation.Fields(
+                              name: controller.toupload[i].name,
+                              current: false,
                             ),
-                            controller.toupload[i].size,
-                            controller.toupload[i].path,
                           ),
-                      ],
-                    );
-                  },
-                ),
+                          controller.toupload[i].size,
+                          controller.toupload[i].path,
+                        ),
+                    ],
+                  );
+                }),
                 Container(
                   decoration: ShapeDecoration(
                     shape: RoundedRectangleBorder(
@@ -242,7 +235,7 @@ class Presentation extends StatelessWidget {
                         );
                     if (result != null) {
                       PlatformFile file = result.files.first;
-                      postjoincontroller.toupload.add(file);
+                      controller.toupload.add(file);
                       // print(file.name);
                       // print(file.bytes);
                       // print(file.size);
@@ -262,7 +255,11 @@ class Presentation extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset('asset/image/uploadcloud.png', height: 70),
+                        Image.asset(
+                          'asset/image/uploadcloud.png',
+                          package: "konn3ctsdk",
+                          height: 70,
+                        ),
                         Text(
                           'Drag files here to upload',
                           style: TextStyle(
@@ -300,106 +297,105 @@ class Presentation extends StatelessWidget {
     int size,
     String path,
   ) {
-    return GetBuilder<postjoinController>(
-      builder: (postjoincontroller) {
-        return InkWell(
-          onTap: () {
-            postjoincontroller.selecttoupload = PlatformFile(
-              name: presentationmodel.fields!.name!,
-              size: size,
-              path: path,
-            );
-            // print(postjoincontroller.selecttoupload.name);
-          },
-          child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 5),
-            height: 32,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03999999910593033),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  width: 24,
-                  height: 24,
-                  padding: const EdgeInsets.all(1.25),
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(width: 1, color: Colors.white),
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    Icons.done,
-                    color:
-                        postjoincontroller.selecttoupload.name ==
-                            presentationmodel.fields!.name!
-                        ? Colors.white
-                        : Colors.transparent,
-                    size: 15,
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: Text(
-                    presentationmodel.fields!.name!,
-                    style: TextStyle(
-                      color: Color(0xF2F5F9FF),
-                      fontSize: 14,
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const Spacer(),
-                if (presentationmodel.fields!.current != null &&
-                    presentationmodel.fields!.current!)
-                  Container(
-                    width: 91,
-                    height: 26,
-                    decoration: BoxDecoration(color: Colors.white),
-                    alignment: Alignment.center,
-                    child: Text(
-                      'CURRENT',
-                      style: TextStyle(
-                        color: Color(0xF20E0E0E),
-                        fontSize: 14,
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                Icon(Icons.more_vert_outlined, color: Colors.white),
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: Icon(Icons.delete, color: Colors.white),
-                  onPressed: () {
-                    if (presentationmodel.id != null) {
-                      postjoincontroller.bigbluebuttonsdkPlugin
-                          .removepresentation(
-                            presentationid: presentationmodel.id!,
-                          );
-                    } else {
-                      // Find and remove the item
-                      var result = postjoincontroller.toupload.where((v) {
-                        return v.name == presentationmodel.fields!.name!;
-                      }).toList();
-
-                      if (result.isNotEmpty) {
-                        postjoincontroller.toupload.remove(result.first);
-                      }
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
+    return InkWell(
+      onTap: () {
+        controller.selecttoupload = PlatformFile(
+          name: presentationmodel.fields!.name!,
+          size: size,
+          path: path,
         );
+        // print(controller.selecttoupload.name);
       },
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        height: 32,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.03999999910593033),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 24,
+              height: 24,
+              padding: const EdgeInsets.all(1.25),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(width: 1, color: Colors.white),
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                Icons.done,
+                color:
+                    controller.selecttoupload.name ==
+                        presentationmodel.fields!.name!
+                    ? Colors.white
+                    : Colors.transparent,
+                size: 15,
+              ),
+            ),
+            const SizedBox(width: 15),
+            Expanded(
+              child: Text(
+                presentationmodel.fields!.name!,
+                style: TextStyle(
+                  color: Color(0xF2F5F9FF),
+                  fontSize: 14,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            const Spacer(),
+            if (presentationmodel.fields!.current != null &&
+                presentationmodel.fields!.current!)
+              Container(
+                width: 91,
+                height: 26,
+                decoration: BoxDecoration(color: Colors.white),
+                alignment: Alignment.center,
+                child: Text(
+                  'CURRENT',
+                  style: TextStyle(
+                    color: Color(0xF20E0E0E),
+                    fontSize: 14,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            Icon(Icons.more_vert_outlined, color: Colors.white),
+            const SizedBox(width: 12),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.white),
+              onPressed: () {
+                if (presentationmodel.id != null) {
+                  controller.bigbluebuttonsdkPlugin.removepresentation(
+                    presentationid: presentationmodel.id!,
+                  );
+                } else {
+                  // Find and remove the item
+                  var result = controller.toupload.where((v) {
+                    return v.name == presentationmodel.fields!.name!;
+                  }).toList();
+                  print("remove docresult");
+                  print(result);
+                  print(controller.toupload);
+                  if (result.isNotEmpty) {
+                    controller.toupload.remove(result.first);
+                  }
+                  print(result.first);
+                  print(controller.toupload);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

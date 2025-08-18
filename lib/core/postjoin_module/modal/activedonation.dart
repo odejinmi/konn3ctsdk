@@ -157,12 +157,18 @@ class Activedonation extends StatelessWidget {
 
     var json_body;
     json_body = {"status": 0};
+    print("donation json_body");
+    print(json_body);
 
+    https: //dev.konn3ct.ng/api/k4/donation/20
+    print("k4/donation/${postjoincontroller.donationdetails[0]["id"]}");
     var cmddetails = await Diorequest().patch(
-      "k4/donation/${postjoincontroller.donationdetails[0]["room_id"]}",
+      "k4/donation/${postjoincontroller.donationdetails[0]["id"]}",
       json_body,
       postjoincontroller.token,
     );
+    print("donation cmddetails patch");
+    print(cmddetails);
     // var cmddetails = await Diorequest().get("start-a-room/$id");
 
     if (cmddetails['success']) {

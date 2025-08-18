@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -33,12 +31,6 @@ class MethodChannelKonn3ctsdk extends Konn3ctsdkPlatform {
     required Map<dynamic, dynamic> roomdetails,
     required BuildContext context,
   }) async {
-    print("baseurl");
-    print(baseurl);
-    print(token);
-    print(accesscode);
-    print(jsonEncode(roomdetails));
-    print(jsonEncode(jsonEncode(roomdetails)));
     postjoinController pollscontroller = Get.put(postjoinController());
     pollscontroller.roomdetails = roomdetails;
     pollscontroller.baseurl = baseurl;
@@ -54,7 +46,9 @@ class MethodChannelKonn3ctsdk extends Konn3ctsdkPlatform {
       context: context,
       builder: (BuildContext context) => Konn3ct(),
     );
-    Get.delete<postjoinController>();
+    // if (response != null) {
+    //   Get.delete<postjoinController>();
+    // }
     return response;
   }
 }

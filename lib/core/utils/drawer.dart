@@ -1,4 +1,5 @@
 // import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
+import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/modal/presentation.dart';
@@ -8,7 +9,6 @@ import 'package:konn3ctsdk/core/utils/dialogs/cinema.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/donations_dialog.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/polls_dialog.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/settings.dart';
-import 'package:konn3ctsdk/core/utils/virtualbackground.dart';
 
 import 'dialogs/chat.dart';
 
@@ -97,29 +97,50 @@ class _DrawerCompState extends State<DrawerComp> {
                       const Divider(),
                     ],
                   ),
-                ListTile(
-                  leading: const Icon(Icons.chat_bubble_outline, size: 20),
-                  title: const Text(
-                    'Chat',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                  iconColor: Colors.white,
-                  onTap: () {
-                    Navigator.pop(context);
-                    showGeneralDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      barrierColor: Colors.transparent,
-                      transitionDuration: const Duration(milliseconds: 400),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return ChatDialog();
+                GetBuilder<Websocket>(
+                  builder: (logic) {
+                    return ListTile(
+                      leading: const Icon(Icons.chat_bubble_outline, size: 20),
+                      title: const Text(
+                        'Chat',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                      iconColor: Colors.white,
+                      onTap: () {
+                        Navigator.pop(context);
+                        if (logic
+                                .meetingResponse
+                                ?.fields
+                                .lockSettingsProps
+                                .disablePublicChat ??
+                            false) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "Your Public Chat has been disabled by the Moderator",
+                              ),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                          return;
+                        }
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Colors.transparent,
+                          transitionDuration: const Duration(milliseconds: 400),
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                                return ChatDialog();
+                              },
+                        );
+                        // Get.bottomSheet(Container(), isScrollControlled: true);
                       },
                     );
-                    // Get.bottomSheet(Container(), isScrollControlled: true);
                   },
                 ),
                 ListTile(
@@ -142,22 +163,22 @@ class _DrawerCompState extends State<DrawerComp> {
                   iconColor: Colors.white,
                   onTap: () {},
                 ),
-                ListTile(
-                  leading: Image.asset(
-                    package: "konn3ctsdk",
-                    'asset/image/fullscreen_icon.png',
-                  ),
-                  title: const Text(
-                    'Go Fullscreen',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                  iconColor: Colors.white,
-                  onTap: () {},
-                ),
+                // ListTile(
+                //   leading: Image.asset(
+                //     package: "konn3ctsdk",
+                //     'asset/image/fullscreen_icon.png',
+                //   ),
+                //   title: const Text(
+                //     'Go Fullscreen',
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: 14,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   iconColor: Colors.white,
+                //   onTap: () {},
+                // ),
                 ListTile(
                   leading: const Icon(Icons.monitor_rounded, size: 20),
                   title: const Text(
@@ -174,43 +195,43 @@ class _DrawerCompState extends State<DrawerComp> {
                         !postjoincontroller.iswhiteboard;
                   },
                 ),
-                if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
-                        null &&
-                    postjoincontroller
-                        .bigbluebuttonsdkPlugin
-                        .mydetails!
-                        .fields!
-                        .presenter!)
-                  ListTile(
-                    leading: const Icon(Icons.folder_open_rounded, size: 20),
-                    title: const Text(
-                      'Upload Files',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14,
-                        color: Colors.white,
-                      ),
+                // if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
+                //         null &&
+                //     postjoincontroller
+                //         .bigbluebuttonsdkPlugin
+                //         .mydetails!
+                //         .fields!
+                //         .presenter!)
+                ListTile(
+                  leading: const Icon(Icons.folder_open_rounded, size: 20),
+                  title: const Text(
+                    'Upload Files',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color: Colors.white,
                     ),
-                    iconColor: Colors.white,
-                    onTap: () async {
-                      Navigator.pop(context);
-                      Get.bottomSheet(
-                        Presentation(),
-                        isScrollControlled: true,
-                        backgroundColor: Color(0xFF3E8466),
-                      );
-
-                      // showGeneralDialog(
-                      //     context: context,
-                      //     barrierDismissible: false,
-                      //     barrierColor: Colors.transparent,
-                      //     transitionDuration: const Duration(milliseconds: 400),
-                      //     pageBuilder: (context, animation, secondaryAnimation) {
-                      //       return const Presentation();
-                      //     }
-                      // );
-                    },
                   ),
+                  iconColor: Colors.white,
+                  onTap: () async {
+                    Navigator.pop(context);
+                    Get.bottomSheet(
+                      Presentation(),
+                      isScrollControlled: true,
+                      backgroundColor: Color(0xFF3E8466),
+                    );
+
+                    // showGeneralDialog(
+                    //     context: context,
+                    //     barrierDismissible: false,
+                    //     barrierColor: Colors.transparent,
+                    //     transitionDuration: const Duration(milliseconds: 400),
+                    //     pageBuilder: (context, animation, secondaryAnimation) {
+                    //       return const Presentation();
+                    //     }
+                    // );
+                  },
+                ),
                 SwitchListTile(
                   title: Text(
                     'Raise Hand',
@@ -322,55 +343,54 @@ class _DrawerCompState extends State<DrawerComp> {
                     iconColor: Colors.white,
                     onTap: () {
                       Navigator.pop(context);
-                      Get.bottomSheet(
-                        PollsDialog(),
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(
-                              30,
-                            ), // Curving the top-left corner
-                            topRight: Radius.circular(
-                              30,
-                            ), // Curving the top-right corner
-                          ),
-                          side: BorderSide(width: 1, color: Color(0xFF3E8466)),
-                        ),
-                      );
+                      showGeneralDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        barrierColor: Colors.transparent,
+                        transitionDuration: const Duration(milliseconds: 400),
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return PollsDialog();
+                        },
+                      ).then((_) {
+                        // This runs after bottom sheet is dismissed
+                        var controller = postjoincontroller.pullcontroller;
+                        controller.question.value = "";
+                        controller.options.value = ['Option 1'];
+                      });
                     },
                   ),
-                ListTile(
-                  leading: Image.asset(
-                    package: "konn3ctsdk",
-                    'asset/image/polls_icon.png',
-                  ),
-                  title: const Text(
-                    'Virtual background',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.white,
-                    ),
-                  ),
-                  iconColor: Colors.white,
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.bottomSheet(
-                      Virtualbackgroundviews(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(
-                            30,
-                          ), // Curving the top-left corner
-                          topRight: Radius.circular(
-                            30,
-                          ), // Curving the top-right corner
-                        ),
-                        side: BorderSide(width: 1, color: Color(0xFF3E8466)),
-                      ),
-                    );
-                  },
-                ),
+                // ListTile(
+                //   leading: Image.asset(
+                //     package: "konn3ctsdk",
+                //     'asset/image/polls_icon.png',
+                //   ),
+                //   title: const Text(
+                //     'Virtual background',
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.w500,
+                //       fontSize: 14,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                //   iconColor: Colors.white,
+                //   onTap: () {
+                //     Navigator.pop(context);
+                //     Get.bottomSheet(
+                //       Virtualbackgroundviews(),
+                //       shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.only(
+                //           topLeft: Radius.circular(
+                //             30,
+                //           ), // Curving the top-left corner
+                //           topRight: Radius.circular(
+                //             30,
+                //           ), // Curving the top-right corner
+                //         ),
+                //         side: BorderSide(width: 1, color: Color(0xFF3E8466)),
+                //       ),
+                //     );
+                //   },
+                // ),
                 ListTile(
                   leading: const Icon(Icons.attach_money_rounded, size: 20),
                   title: const Text(
@@ -384,6 +404,15 @@ class _DrawerCompState extends State<DrawerComp> {
                   iconColor: Colors.white,
                   onTap: () {
                     Navigator.pop(context);
+                    if (postjoincontroller.donate) {
+                      SnackBar(
+                        content: Text(
+                          "You still have an active donation",
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                      return;
+                    }
                     _showDonationsDialog();
                   },
                 ),

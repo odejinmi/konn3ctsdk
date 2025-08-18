@@ -47,6 +47,10 @@ class _DonationsDialogState extends State<DonationsDialog> {
         message: "Donation created|${donationNameController.text}|2|10000000|7",
       );
       controller.bigbluebuttonsdkPlugin.stoptyping();
+      // {"success":true,"message":"Donation created successfully","data":22}
+      controller.donationdetails = [
+        {"id": cmddetails["data"]},
+      ];
       // ["{\"msg\":\"method\",\"id\":\"428\",\"method\":\"sendGroupChatMsg\",\"params\":[\"MAIN-PUBLIC-GROUP-CHAT\",{\"correlationId\":\"w_nidxlpogyafr-1728639206402\",\"sender\":{\"id\":\"w_nidxlpogyafr\",\"name\":\"\",\"role\":\"\"},\"chatEmphasizedText\":true,\"message\":\"Donation created|help the needy|2|10000000|7\"}]}"]
       // ["{\"msg\":\"method\",\"id\":\"429\",\"method\":\"stopUserTyping\",\"params\":[]}"]
     } else {

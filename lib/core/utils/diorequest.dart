@@ -147,6 +147,7 @@ class Diorequest {
 
   Future<dynamic> patch(String endpoint, Object data, String token) async {
     String url = '$apibaseurl$endpoint';
+    print("url: $url");
     String Ivstring = generateRandomString(16);
     // String keystring = dotenv.env['API_KEY'] ?? 'API_KEY not found';
     String keystring = "12345678901234567890123456789012";

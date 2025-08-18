@@ -44,7 +44,7 @@ dev_dependencies:
 
 
 dependency_overrides:
-  flutter_webrtc: ^0.13.1
+  flutter_webrtc: ^0.14.2
 #  callkeep: ^0.3.3
 #  flutter_callkeep: ^1.0.0
 # For information on the generic Dart part of this file, see the

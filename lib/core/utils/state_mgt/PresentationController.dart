@@ -19,5 +19,5 @@ class PresentationController extends GetxController
 
   var _toupload = <PlatformFile>[].obs; // Initial zoom level (100%)
   set toupload(value) => _toupload.value = value;
-  get toupload => _toupload.value;
+  get toupload => _toupload;
 }

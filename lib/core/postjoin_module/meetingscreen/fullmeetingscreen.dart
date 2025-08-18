@@ -2,8 +2,7 @@ import 'dart:ui';
 
 import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
 import 'package:bigbluebuttonsdk/utils/strings.dart';
-import 'package:file_picker/file'
-    '_picker.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,7 +11,7 @@ import 'package:konn3ctsdk/core/utils/dialogs/caption.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/end_recording_dialog.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/participant_dialog.dart';
 import 'package:konn3ctsdk/core/utils/drawer.dart';
-import 'package:motion_toast/motion_toast.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../postjoin_module/modal/activedonation.dart';
 import '../../postjoin_module/modal/endroom.dart';
@@ -37,12 +36,16 @@ class Fullmeetingscreen extends GetView<postjoinController> {
           leading: IconButton.outlined(
             onPressed: () {
               if (controller.meetingdetails.customdata.isNotEmpty) {
-                Clipboard.setData(
-                  ClipboardData(
-                    text:
-                        controller.meetingdetails.customdata[0]["meetingLink"],
-                  ),
+                Share.share(
+                  controller.meetingdetails.customdata[0]["meetingLink"],
+                  subject: 'Share Message',
                 );
+                // Clipboard.setData(
+                //   ClipboardData(
+                //     text:
+                //         controller.meetingdetails.customdata[0]["meetingLink"],
+                //   ),
+                // );
               }
             },
             icon: Image.asset(
@@ -120,56 +123,110 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                         ],
                       ),
                     )
-                  : const SizedBox(),
-              if (controller.donate)
-                InkWell(
-                  onTap: () {
-                    if (controller.bigbluebuttonsdkPlugin.mydetails != null &&
-                        controller
-                            .bigbluebuttonsdkPlugin
-                            .mydetails!
-                            .fields!
-                            .presenter!) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          backgroundColor: Color(0xFF3E8466),
-                          content: Activedonation(),
+                  : const SizedBox.shrink(),
+              controller.donate && controller.bigbluebuttonsdkPlugin.isrecording
+                  ? InkWell(
+                      onTap: () {
+                        if (controller.bigbluebuttonsdkPlugin.mydetails !=
+                                null &&
+                            controller
+                                .bigbluebuttonsdkPlugin
+                                .mydetails!
+                                .fields!
+                                .presenter!) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: Color(0xFF3E8466),
+                              content: Activedonation(),
+                            ),
+                          );
+                        } else {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: Color(0xFF3E8466),
+                              content: Makedonation(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(34, 116, 81, 1),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(32),
+                          ),
+                          border: Border.all(color: Colors.white, width: 1),
                         ),
-                      );
-                    } else {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          backgroundColor: Color(0xFF3E8466),
-                          content: Makedonation(),
+                        child: const Icon(
+                          Icons.attach_money_rounded,
+                          color: Colors.white,
                         ),
-                      );
-                    }
-                  },
-                  child: Container(
-                    width: 90,
-                    height: 40,
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(34, 116, 81, 1),
-                      borderRadius: const BorderRadius.all(Radius.circular(32)),
-                      border: Border.all(color: Colors.white, width: 1),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(Icons.attach_money_rounded, color: Colors.white),
-                        Text(
-                          'Donate',
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                      ),
+                    )
+                  : controller.donate
+                  ? InkWell(
+                      onTap: () {
+                        if (controller.bigbluebuttonsdkPlugin.mydetails !=
+                                null &&
+                            controller
+                                .bigbluebuttonsdkPlugin
+                                .mydetails!
+                                .fields!
+                                .presenter!) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: Color(0xFF3E8466),
+                              content: Activedonation(),
+                            ),
+                          );
+                        } else {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              backgroundColor: Color(0xFF3E8466),
+                              content: Makedonation(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 90,
+                        height: 40,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(34, 116, 81, 1),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(32),
+                          ),
+                          border: Border.all(color: Colors.white, width: 1),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(
+                              Icons.attach_money_rounded,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Donate',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ],
           ),
           actions: [
@@ -224,30 +281,50 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                     color: Colors.white,
                   ),
             const SizedBox(width: 10),
-            GestureDetector(
-              onTap: () {
-                controller.scaffoldKey.currentState?.openDrawer();
-              },
-              child: Container(
-                width: 65,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Color.fromRGBO(71, 137, 109, 1),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Icon(Icons.people_outline, color: Colors.white),
-                    // Text('2', style: TextStyle(color: Colors.white,),)
-                    Text(
-                      (controller.bigbluebuttonsdkPlugin.participant.length)
-                          .toString(),
-                      style: const TextStyle(color: Colors.white),
+            GetBuilder<Websocket>(
+              builder: (logic) {
+                return GestureDetector(
+                  onTap: () {
+                    if (logic
+                            .meetingResponse
+                            ?.fields
+                            .lockSettingsProps
+                            .hideUserList ??
+                        false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            "Your Participants List has been disabled by the Moderator",
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    controller.scaffoldKey.currentState?.openDrawer();
+                  },
+                  child: Container(
+                    width: 65,
+                    height: 40,
+                    decoration: const BoxDecoration(
+                      color: Color.fromRGBO(71, 137, 109, 1),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
-                  ],
-                ),
-              ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Icon(Icons.people_outline, color: Colors.white),
+                        // Text('2', style: TextStyle(color: Colors.white,),)
+                        Text(
+                          (controller.bigbluebuttonsdkPlugin.participant.length)
+                              .toString(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
             const SizedBox(width: 15),
           ],
@@ -353,6 +430,22 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                     ),
                   InkWell(
                     onTap: () {
+                      if (websocket
+                              .meetingResponse
+                              ?.fields
+                              .lockSettingsProps
+                              .disableMic ??
+                          false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Your Microphone has been disabled by the Moderator",
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
                       controller.ismuted = !controller.ismuted;
                       controller.bigbluebuttonsdkPlugin.mutemyself();
                       ;
@@ -377,19 +470,41 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                   ),
                   IconButton.filled(
                     onPressed: () {
+                      if (websocket
+                              .meetingResponse
+                              ?.fields
+                              .lockSettingsProps
+                              .disableCam ??
+                          false) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              "Your Camera has been disabled by the Moderator",
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
                       if (controller.bigbluebuttonsdkPlugin.isvideo) {
                         controller.bigbluebuttonsdkPlugin.stopcamera();
                       } else {
                         controller.bigbluebuttonsdkPlugin.startcamera();
                       }
                     },
-                    icon: const Icon(Icons.videocam_outlined),
-                    style: const ButtonStyle(
+                    icon: Icon(
+                      controller.bigbluebuttonsdkPlugin.isvideo
+                          ? Icons.videocam_outlined
+                          : Icons.videocam_off_outlined,
+                    ),
+                    style: ButtonStyle(
                       side: WidgetStatePropertyAll(
                         BorderSide(width: 1, color: Colors.white),
                       ),
                       backgroundColor: WidgetStatePropertyAll(
-                        Color.fromRGBO(34, 116, 81, 1),
+                        controller.bigbluebuttonsdkPlugin.isvideo
+                            ? Color.fromRGBO(34, 116, 81, 1)
+                            : Color(0xffCC525F),
                       ),
                     ),
                     color: Colors.white,
@@ -546,10 +661,12 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                                         .customdata[0]["meetingLink"],
                                   ),
                                 );
-                                MotionToast.success(
-                                  title: Text("Meeting Link"),
-                                  description: Text("Meeting Link copied"),
-                                ).show(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("Meeting Link copied"),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                );
                               }
                             },
                             child: Container(

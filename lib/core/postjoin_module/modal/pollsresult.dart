@@ -153,91 +153,91 @@ class Pollsresult extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              width: 100,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(93, 149, 126, 1),
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.white),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Edit',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 30),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(93, 149, 126, 1),
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: Colors.white),
-                              ),
-                              child: const Center(
-                                child: Icon(Icons.stop, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(93, 149, 126, 1),
-                                borderRadius: BorderRadius.circular(15),
-                                border: Border.all(color: Colors.white),
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.play_arrow,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              // Handle end poll/publish action
-                            },
-                            child: Container(
-                              width: 151,
-                              height: 48,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(204, 82, 95, 1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'End Poll/Publish',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         Navigator.pop(context);
+                      //       },
+                      //       child: Container(
+                      //         width: 100,
+                      //         height: 32,
+                      //         decoration: BoxDecoration(
+                      //           color: const Color.fromRGBO(93, 149, 126, 1),
+                      //           borderRadius: BorderRadius.circular(8),
+                      //           border: Border.all(color: Colors.white),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             'Edit',
+                      //             style: TextStyle(color: Colors.white),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 30),
+                      //     GestureDetector(
+                      //       onTap: () {},
+                      //       child: Container(
+                      //         width: 32,
+                      //         height: 32,
+                      //         decoration: BoxDecoration(
+                      //           color: const Color.fromRGBO(93, 149, 126, 1),
+                      //           borderRadius: BorderRadius.circular(15),
+                      //           border: Border.all(color: Colors.white),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Icon(Icons.stop, color: Colors.white),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     const SizedBox(width: 20),
+                      //     GestureDetector(
+                      //       onTap: () {},
+                      //       child: Container(
+                      //         width: 32,
+                      //         height: 32,
+                      //         decoration: BoxDecoration(
+                      //           color: const Color.fromRGBO(93, 149, 126, 1),
+                      //           borderRadius: BorderRadius.circular(15),
+                      //           border: Border.all(color: Colors.white),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Icon(
+                      //             Icons.play_arrow,
+                      //             color: Colors.white,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // const SizedBox(height: 20),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.start,
+                      //   children: [
+                      //     GestureDetector(
+                      //       onTap: () {
+                      //         // Handle end poll/publish action
+                      //       },
+                      //       child: Container(
+                      //         width: 151,
+                      //         height: 48,
+                      //         decoration: BoxDecoration(
+                      //           color: const Color.fromRGBO(204, 82, 95, 1),
+                      //           borderRadius: BorderRadius.circular(8),
+                      //         ),
+                      //         child: const Center(
+                      //           child: Text(
+                      //             'End Poll/Publish',
+                      //             style: TextStyle(color: Colors.white),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
                 ),

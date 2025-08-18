@@ -29,7 +29,11 @@ class Leavesession extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset("asset/image/caution.png", height: 14),
+                  Image.asset(
+                    package: "konn3ctsdk",
+                    "asset/image/caution.png",
+                    height: 14,
+                  ),
                   const SizedBox(width: 8),
                   const Expanded(
                     child: SizedBox(

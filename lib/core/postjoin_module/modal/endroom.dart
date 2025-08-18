@@ -59,6 +59,7 @@ class Endroom extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.asset(
+                            package: "konn3ctsdk",
                             "asset/image/endroomforall.png",
                             height: 23,
                           ),
@@ -128,6 +129,7 @@ class Endroom extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.asset(
+                            package: "konn3ctsdk",
                             "asset/image/leave_icon2.png",
                             height: 23,
                           ),

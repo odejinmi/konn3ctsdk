@@ -8,11 +8,13 @@ plugins {
 android {
     namespace = "com.konn3ct.konn3ctsdk_example"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+        // Enable desugaring
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -41,4 +43,13 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+//    implementation 'com.google.android.material:material:1.12.0'
+//    implementation platform('com.google.firebase:firebase-bom:33.9.0')
+//    implementation 'com.google.firebase:firebase-analytics'
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+
+//    implementation "androidx.multidex:multidex:2.0.1"
 }

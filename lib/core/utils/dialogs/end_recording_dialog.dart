@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
 
 class EndRecordingDialog extends StatelessWidget {
   EndRecordingDialog({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -16,37 +16,44 @@ class EndRecordingDialog extends StatelessWidget {
           height: 200,
           decoration: const BoxDecoration(
             color: Color.fromRGBO(62, 132, 102, 1),
-            borderRadius: BorderRadius.all(Radius.circular(8))
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
                 const Padding(
                   padding: EdgeInsets.only(left: 24.0),
                   child: Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded, color: Color.fromRGBO(204, 82, 95, 1)),
+                      Icon(
+                        Icons.warning_amber_rounded,
+                        color: Color.fromRGBO(204, 82, 95, 1),
+                      ),
                       SizedBox(width: 10),
-                      Text('End Recording', style: TextStyle(color: Color.fromRGBO(204, 82, 95, 1), fontSize: 20, fontWeight: FontWeight.bold),)
+                      Text(
+                        'End Recording',
+                        style: TextStyle(
+                          color: Color.fromRGBO(204, 82, 95, 1),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                          
-                const SizedBox(height: 10,),
+
+                const SizedBox(height: 10),
                 const Padding(
                   padding: EdgeInsets.only(right: 20.0),
                   child: Text(
                     'Are you sure you want to end recording? \nYou can’t undo this action.',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14
-                    ),
+                    style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
-                          
-                const SizedBox(height: 30,),
+
+                const SizedBox(height: 30),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -58,20 +65,39 @@ class EndRecordingDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: ElevatedButton(
-                          onPressed: (){Navigator.pop(context);},
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.all(5),
-                            side: const BorderSide(width: 0.5, color: Colors.white),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            backgroundColor: const Color.fromRGBO(62, 132, 102, 1)
-                          ), 
-                          child: const Center(child: Text("Don't End", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Inter'),)),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(5),
+                          side: const BorderSide(
+                            width: 0.5,
+                            color: Colors.white,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          backgroundColor: const Color.fromRGBO(
+                            62,
+                            132,
+                            102,
+                            1,
+                          ),
                         ),
+                        child: const Center(
+                          child: Text(
+                            "Don't End",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                    
-                          
+
                     Container(
                       width: 130,
                       height: 48,
@@ -79,30 +105,48 @@ class EndRecordingDialog extends StatelessWidget {
                         color: const Color.fromRGBO(204, 82, 95, 1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: ElevatedButton(
-                        onPressed: (){
-                          // controller.stopRecording();
-                          Navigator.pop(context);
+                      child: GetBuilder<postjoinController>(
+                        builder: (logic) {
+                          return ElevatedButton(
+                            onPressed: () {
+                              // controller.stopRecording();
+                              logic.bigbluebuttonsdkPlugin.toggleRecording();
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.all(5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              backgroundColor: const Color.fromRGBO(
+                                204,
+                                82,
+                                95,
+                                1,
+                              ),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'End Recording',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Inter',
+                                ),
+                              ),
+                            ),
+                          );
                         },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.all(5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          backgroundColor: const Color.fromRGBO(204, 82, 95, 1),
-                        ), 
-                        child: const Center(child: Text('End Recording', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'Inter'),)),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-
         ),
       ),
     );
-
   }
 }

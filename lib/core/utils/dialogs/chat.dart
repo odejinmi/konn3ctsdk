@@ -43,16 +43,16 @@ class _ChatDialogState extends State<ChatDialog> {
     return GetBuilder<postjoinController>(
       builder: (postjoincontroller) {
         if (widget.participant != null) {
-          var list = postjoincontroller.bigbluebuttonsdkPlugin.participant
-              .where((v) {
-                return v.fields!.userId == widget.participant!.fields!.userId;
-              })
-              .toList();
+          var list =
+              postjoincontroller.bigbluebuttonsdkPlugin.participant.where((v) {
+            return v.fields!.userId == widget.participant!.fields!.userId;
+          }).toList();
           if (list[0].fields!.chatId != null) {
             chatid = list[0].fields!.chatId!;
           }
         }
         return Scaffold(
+          backgroundColor: Colors.transparent,
           body: Container(
             margin: const EdgeInsets.only(top: 94),
             decoration: const BoxDecoration(
@@ -85,9 +85,7 @@ class _ChatDialogState extends State<ChatDialog> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-
                         const SizedBox(width: 20),
-
                         Container(
                           width: 150,
                           height: 38,
@@ -106,7 +104,6 @@ class _ChatDialogState extends State<ChatDialog> {
                                   fontSize: 16,
                                 ),
                               ),
-
                               PopupMenuButton<dynamic>(
                                 color: const Color.fromRGBO(93, 149, 126, 1),
                                 icon: const Icon(
@@ -161,7 +158,6 @@ class _ChatDialogState extends State<ChatDialog> {
                         ),
                       ],
                     ),
-
                   const SizedBox(height: 20),
                   if (notification)
                     Container(
@@ -202,7 +198,6 @@ class _ChatDialogState extends State<ChatDialog> {
                         ],
                       ),
                     ),
-
                   Expanded(
                     child: GetBuilder<Websocket>(
                       builder: (logic) {
@@ -220,7 +215,6 @@ class _ChatDialogState extends State<ChatDialog> {
                       },
                     ),
                   ),
-
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: TextField(
@@ -247,9 +241,9 @@ class _ChatDialogState extends State<ChatDialog> {
                                 if (messageController.text.isNotEmpty) {
                                   postjoincontroller.bigbluebuttonsdkPlugin
                                       .sendmessage(
-                                        chatid: chatid,
-                                        message: messageController.text,
-                                      );
+                                    chatid: chatid,
+                                    message: messageController.text,
+                                  );
                                   messageController.clear();
                                 }
                               },
@@ -271,6 +265,7 @@ class _ChatDialogState extends State<ChatDialog> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 10),
                 ],
               ),
             ),
