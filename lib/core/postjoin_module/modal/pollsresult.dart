@@ -13,7 +13,7 @@ class Pollsresult extends StatelessWidget {
 
   String calculate(pollanalyseparser, index) {
     if (pollanalyseparser.answers[index].numVotes == null) {
-      return (100 / json["fields"]["answers"].length).toStringAsFixed(2);
+      return "0";
     } else {
       return ((pollanalyseparser.answers[index].numVotes /
                   pollanalyseparser?.numResponders) *

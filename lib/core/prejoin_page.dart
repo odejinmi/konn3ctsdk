@@ -189,17 +189,17 @@ class prejoinPage extends GetView<postjoinController> {
                         ),
 
                         const Spacer(),
-                        IconButton.filled(
-                          onPressed: () {
-                            settingsDialog(context);
-                          },
-                          icon: const Icon(Icons.settings_outlined),
-                          style: const ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(
-                              Color.fromRGBO(185, 201, 194, 1),
-                            ),
-                          ),
-                        ),
+                        // IconButton.filled(
+                        //   onPressed: () {
+                        //     settingsDialog(context);
+                        //   },
+                        //   icon: const Icon(Icons.settings_outlined),
+                        //   style: const ButtonStyle(
+                        //     backgroundColor: MaterialStatePropertyAll(
+                        //       Color.fromRGBO(185, 201, 194, 1),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
 

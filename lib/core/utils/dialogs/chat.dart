@@ -26,7 +26,7 @@ class _ChatDialogState extends State<ChatDialog> {
   dynamic selectedItem;
 
   final messageController = TextEditingController();
-  String chatid = "MAIN-PUBLIC-GROUP-CHAT";
+  String chatid = "";
 
   @override
   void initState() {
@@ -35,6 +35,8 @@ class _ChatDialogState extends State<ChatDialog> {
       if (widget.participant!.fields!.chatId != null) {
         chatid = widget.participant!.fields!.chatId!;
       }
+    } else {
+      chatid = "MAIN-PUBLIC-GROUP-CHAT";
     }
   }
 
@@ -43,10 +45,11 @@ class _ChatDialogState extends State<ChatDialog> {
     return GetBuilder<postjoinController>(
       builder: (postjoincontroller) {
         if (widget.participant != null) {
-          var list =
-              postjoincontroller.bigbluebuttonsdkPlugin.participant.where((v) {
-            return v.fields!.userId == widget.participant!.fields!.userId;
-          }).toList();
+          var list = postjoincontroller.bigbluebuttonsdkPlugin.participant
+              .where((v) {
+                return v.fields!.userId == widget.participant!.fields!.userId;
+              })
+              .toList();
           if (list[0].fields!.chatId != null) {
             chatid = list[0].fields!.chatId!;
           }
@@ -241,9 +244,9 @@ class _ChatDialogState extends State<ChatDialog> {
                                 if (messageController.text.isNotEmpty) {
                                   postjoincontroller.bigbluebuttonsdkPlugin
                                       .sendmessage(
-                                    chatid: chatid,
-                                    message: messageController.text,
-                                  );
+                                        chatid: chatid,
+                                        message: messageController.text,
+                                      );
                                   messageController.clear();
                                 }
                               },

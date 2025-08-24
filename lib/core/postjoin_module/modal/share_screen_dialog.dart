@@ -1,3 +1,4 @@
+import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -91,49 +92,55 @@ class ShareScreenDialog extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 310,
-                  height: 44,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (controller
-                              .websocket
-                              .remoteRTCVideoRenderer
-                              .srcObject !=
-                          null) {
-                        controller.bigbluebuttonsdkPlugin.stopscreenshare();
-                      } else {
-                        Navigator.pop(context);
-                        // var result = await startForegroundService();
-                        // if (result) {
-                        controller.bigbluebuttonsdkPlugin.startscreenshare(
-                          true,
-                        );
-                        // }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(5),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24),
+                GetBuilder<Websocket>(
+                  builder: (logic) {
+                    return SizedBox(
+                      width: 310,
+                      height: 44,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          if (logic.remoteRTCVideoRenderer.srcObject != null) {
+                            controller.bigbluebuttonsdkPlugin.stopscreenshare();
+                          } else {
+                            Navigator.pop(context);
+
+                            // var result = await startForegroundService();
+                            // if (result) {
+                            controller.bigbluebuttonsdkPlugin.startscreenshare(
+                              true,
+                            );
+                            // }
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(5),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(24),
+                              bottomRight: Radius.circular(24),
+                            ),
+                          ),
+                          backgroundColor: const Color.fromRGBO(
+                            30,
+                            30,
+                            30,
+                            0.75,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text(
+                            'Start Broadcast',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Inter',
+                            ),
+                          ),
                         ),
                       ),
-                      backgroundColor: const Color.fromRGBO(30, 30, 30, 0.75),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Start Broadcast',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                        ),
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ],
             );

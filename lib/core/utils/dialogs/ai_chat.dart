@@ -1,5 +1,6 @@
 import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
 
@@ -134,6 +135,8 @@ class AiChat extends StatelessWidget {
   }
 
   Widget chatMessageCard(ChatMessage message) {
+    print('ai chat message');
+    print(message);
     return Align(
       alignment: Alignment.topLeft,
       child: Card(
@@ -146,10 +149,14 @@ class AiChat extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    message.sender,
-                    style: const TextStyle(color: Colors.white),
+                  Expanded(
+                    child: Text(
+                      message.sender,
+                      style: const TextStyle(color: Colors.white),
+                      overflow: TextOverflow.ellipsis, // Handle long names
+                    ),
                   ),
                   const SizedBox(width: 10),
                   const Text(
@@ -161,9 +168,18 @@ class AiChat extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                message.message,
-                style: const TextStyle(color: Colors.white),
+              const SizedBox(height: 8),
+              // Fix unbounded height with shrinkWrap and physics
+              MarkdownBody(
+                // Use MarkdownBody instead of Markdown
+                data: message.message,
+                styleSheet: MarkdownStyleSheet(
+                  p: const TextStyle(color: Colors.white),
+                  h1: const TextStyle(color: Colors.white),
+                  h2: const TextStyle(color: Colors.white),
+                  h3: const TextStyle(color: Colors.white),
+                  // Add other styles as needed
+                ),
               ),
             ],
           ),

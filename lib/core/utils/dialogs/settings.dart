@@ -1,329 +1,381 @@
+import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
 import 'package:flutter/material.dart';
-import 'package:konn3ctsdk/core/postjoin_module/modal/ShowDeviceSettingsDialog.dart';
-import 'package:konn3ctsdk/core/postjoin_module/modal/ShowManageUserSettingsDialog.dart';
-import 'package:konn3ctsdk/core/postjoin_module/modal/ShowNotificationSettingsDialog.dart';
-import 'package:konn3ctsdk/core/postjoin_module/modal/howLayoutSettingsDialog.dart';
-import 'package:konn3ctsdk/core/postjoin_module/modal/waitingroom.dart';
+import 'package:get/get.dart';
+import 'package:konn3ctsdk/core/utils/state_mgt/DeviceSettingsController.dart';
 
-import '../../postjoin_module/modal/takespotattendance.dart';
+class ShowDeviceSettingsDialog extends GetView<DeviceSettingsController> {
+  const ShowDeviceSettingsDialog({super.key});
 
-class SettingsFlow extends StatefulWidget {
-  const SettingsFlow({super.key});
-
-  @override
-  State<SettingsFlow> createState() => _SettingsFlowState();
-}
-
-class _SettingsFlowState extends State<SettingsFlow> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: 400,
-          height: 670,
-          padding: const EdgeInsets.only(
-            top: 24,
-            right: 16,
-            bottom: 24,
-            left: 16,
-          ),
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(62, 132, 102, 1),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
+      body: Obx(() {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            height: 670,
+            padding: const EdgeInsets.only(
+              top: 24,
+              right: 16,
+              bottom: 24,
+              left: 16,
+            ),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(62, 132, 102, 1),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                      iconSize: 24,
+                      color: Colors.white,
+                    ),
+                    const Text(
+                      'Device Settings',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.close),
+                      iconSize: 24,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const Divider(),
+                const SizedBox(height: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Video',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 56,
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        right: 16,
+                        bottom: 12,
+                        left: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(93, 149, 126, 1),
+                        // border: Border.all(width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<MediaDeviceInfo>(
+                                dropdownColor: const Color.fromRGBO(
+                                  62,
+                                  132,
+                                  102,
+                                  1,
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.white,
+                                  size: 34,
+                                ),
+                                value: controller.firstDropdownValue,
+                                items: controller.firstItemsDropdown.map((
+                                  MediaDeviceInfo items,
+                                ) {
+                                  return DropdownMenuItem<MediaDeviceInfo>(
+                                    value: items,
+                                    child: Text(
+                                      items.label,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Inter',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  controller.firstDropdownValue = newValue!;
+                                  controller.bigbluebuttonsdkPlugin
+                                      .switchVideocamera(
+                                        deviceid: newValue.deviceId,
+                                      );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Video Quality',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 56,
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        right: 16,
+                        bottom: 12,
+                        left: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(93, 149, 126, 1),
+                        // border: Border.all(width: 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                dropdownColor: const Color.fromRGBO(
+                                  62,
+                                  132,
+                                  102,
+                                  1,
+                                ),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.white,
+                                  size: 34,
+                                ),
+                                value: controller.secondDropdownValue
+                                    .toString(),
+                                items: controller.secondItemsDropdown.map((
+                                  String items,
+                                ) {
+                                  return DropdownMenuItem(
+                                    value: items,
+                                    child: Text(
+                                      items,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Inter',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  controller.secondDropdownValue = newValue!;
+                                  // logic.bigbluebuttonsdkPlugin.getVideoWithQuality(width: 10, height: 11, frameRate: 30);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Microphone',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 56,
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        right: 16,
+                        bottom: 12,
+                        left: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(93, 149, 126, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(
+                            Icons.mic_none_rounded,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<MediaDeviceInfo>(
+                                dropdownColor: const Color.fromRGBO(
+                                  62,
+                                  132,
+                                  102,
+                                  1,
+                                ),
+                                value: controller.thirdDropdownValue,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.white,
+                                  size: 34,
+                                ),
+                                items: controller.thirdItemsDropdown.map((
+                                  MediaDeviceInfo items,
+                                ) {
+                                  return DropdownMenuItem<MediaDeviceInfo>(
+                                    value: items,
+                                    child: Text(
+                                      items.label,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Inter',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  controller.thirdDropdownValue = newValue!;
+                                  controller.bigbluebuttonsdkPlugin
+                                      .switchmicrophone(
+                                        deviceid: newValue.deviceId,
+                                      );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Speakers',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Inter',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Container(
+                      height: 56,
+                      padding: const EdgeInsets.only(
+                        top: 12,
+                        right: 16,
+                        bottom: 12,
+                        left: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(93, 149, 126, 1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Icon(
+                            Icons.volume_down_rounded,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<MediaDeviceInfo>(
+                                dropdownColor: const Color.fromRGBO(
+                                  62,
+                                  132,
+                                  102,
+                                  1,
+                                ),
+                                value: controller.forthDropdownValue,
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down_rounded,
+                                  color: Colors.white,
+                                  size: 34,
+                                ),
+                                items: controller.forthItemsDropdown.map((
+                                  MediaDeviceInfo items,
+                                ) {
+                                  return DropdownMenuItem<MediaDeviceInfo>(
+                                    value: items,
+                                    child: Text(
+                                      items.label,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Inter',
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (newValue) {
+                                  controller.forthDropdownValue = newValue!;
+                                  controller.bigbluebuttonsdkPlugin
+                                      .switchmicrophone(
+                                        deviceid: newValue.deviceId,
+                                      );
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Settings',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(Icons.close),
-                    iconSize: 24,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-
-              const Divider(),
-
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  showDeviceSettingsDialog();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: const Center(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.settings_outlined,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Device Settings',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  showNotificationSettingsDialog();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: const Center(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.notifications_active_outlined,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Notifications',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  showLayoutSettingsDialog();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          package: "konn3ctsdk",
-                          'asset/image/layout_icon.png',
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Layout',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  showManageUserSettingsDialog();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: const Center(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.people_alt_outlined,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Manage Users',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  showWaitingRoomSettingsDialog();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          package: "konn3ctsdk",
-                          'asset/image/person_wait.png',
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Waiting Room',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 30),
-              GestureDetector(
-                onTap: () {
-                  showTakespotattendance();
-                },
-                child: Container(
-                  height: 56,
-                  width: 358,
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    // color: Color.fromRGBO(93, 149, 126, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  child: Center(
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          package: "konn3ctsdk",
-                          'asset/image/take_spot.png',
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          'Take Spot Attendance',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  showDeviceSettingsDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const ShowDeviceSettingsDialog();
-      },
-    );
-  }
-
-  showNotificationSettingsDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return ShowNotificationSettingsDialog();
-      },
-    );
-  }
-
-  showTakespotattendance() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Takespotattendance();
-      },
-    );
-  }
-
-  showManageUserSettingsDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const ShowManageUserSettingsDialog();
-      },
-    );
-  }
-
-  showLayoutSettingsDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const ShowLayoutSettingsDialog();
-      },
-    );
-  }
-
-  showWaitingRoomSettingsDialog() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: false,
-      barrierColor: Colors.transparent,
-      transitionDuration: const Duration(milliseconds: 400),
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Waitingroom();
-      },
+        );
+      }),
     );
   }
 }

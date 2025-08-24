@@ -167,8 +167,8 @@ class Activedonation extends StatelessWidget {
       json_body,
       postjoincontroller.token,
     );
-    print("donation cmddetails patch");
-    print(cmddetails);
+    // print("donation cmddetails patch");
+    // print(cmddetails);
     // var cmddetails = await Diorequest().get("start-a-room/$id");
 
     if (cmddetails['success']) {

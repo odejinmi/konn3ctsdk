@@ -1,5 +1,3 @@
-import 'package:flutter_background/flutter_background.dart';
-
 /**
  * GetX Template Generator - fb.com/htngu.99
  * */
@@ -15,20 +13,6 @@ void logLongText(String text, {int chunkSize = 1000}) {
     '.{1,$chunkSize}',
   ); // This will split the text into chunks of size `chunkSize`
   pattern.allMatches(text).forEach((match) => print(match.group(0)));
-}
-
-Future<bool> startForegroundService() async {
-  final androidConfig = FlutterBackgroundAndroidConfig(
-    notificationTitle: 'Title of the notification',
-    notificationText: 'Text of the notification',
-    notificationImportance: AndroidNotificationImportance.normal,
-    notificationIcon: AndroidResource(
-      name: 'background_icon',
-      defType: 'drawable',
-    ), // Default is ic_launcher from folder mipmap
-  );
-  await FlutterBackground.initialize(androidConfig: androidConfig);
-  return FlutterBackground.enableBackgroundExecution();
 }
 
 String generateInitials(String fullName) {

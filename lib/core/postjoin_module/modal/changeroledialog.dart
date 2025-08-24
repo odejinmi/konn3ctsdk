@@ -22,6 +22,7 @@ class _ChangeroledialogState extends State<Changeroledialog> {
 
   @override
   Widget build(BuildContext context) {
+    topItemsDD = [];
     if (!widget.participan.fields!.presenter!) {
       topItemsDD.add('PRESENTER');
     }

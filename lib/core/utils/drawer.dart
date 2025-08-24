@@ -79,8 +79,8 @@ class _DrawerCompState extends State<DrawerComp> {
                           Icons.radio_button_checked,
                           size: 20,
                         ),
-                        title: const Text(
-                          'Start Recording',
+                        title: Text(
+                          '${postjoincontroller.bigbluebuttonsdkPlugin.isrecording ? 'Stop' : 'Start'} Recording',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -317,6 +317,7 @@ class _DrawerCompState extends State<DrawerComp> {
                             .fields!
                             .userId!,
                       );
+                      Navigator.pop(context);
                     },
                   ),
 
@@ -391,31 +392,39 @@ class _DrawerCompState extends State<DrawerComp> {
                 //     );
                 //   },
                 // ),
-                ListTile(
-                  leading: const Icon(Icons.attach_money_rounded, size: 20),
-                  title: const Text(
-                    'Donation',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
-                      color: Colors.white,
+                if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
+                        null &&
+                    postjoincontroller
+                            .bigbluebuttonsdkPlugin
+                            .mydetails!
+                            .fields!
+                            .role ==
+                        "MODERATOR")
+                  ListTile(
+                    leading: const Icon(Icons.attach_money_rounded, size: 20),
+                    title: const Text(
+                      'Donation',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
                     ),
+                    iconColor: Colors.white,
+                    onTap: () {
+                      Navigator.pop(context);
+                      if (postjoincontroller.donate) {
+                        SnackBar(
+                          content: Text(
+                            "You still have an active donation",
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        );
+                        return;
+                      }
+                      _showDonationsDialog();
+                    },
                   ),
-                  iconColor: Colors.white,
-                  onTap: () {
-                    Navigator.pop(context);
-                    if (postjoincontroller.donate) {
-                      SnackBar(
-                        content: Text(
-                          "You still have an active donation",
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      );
-                      return;
-                    }
-                    _showDonationsDialog();
-                  },
-                ),
 
                 if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
                         null &&
@@ -506,7 +515,7 @@ class _DrawerCompState extends State<DrawerComp> {
       barrierColor: Colors.transparent,
       transitionDuration: const Duration(milliseconds: 400),
       pageBuilder: (context, animation, secondaryAnimation) {
-        return const SettingsFlow();
+        return const ShowDeviceSettingsDialog();
       },
     );
   }

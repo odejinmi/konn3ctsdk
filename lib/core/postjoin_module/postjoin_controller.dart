@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/cinema.dart';
 import 'package:konn3ctsdk/core/utils/diorequest.dart';
 import 'package:konn3ctsdk/core/utils/state_mgt/DeviceSettingsController.dart';
+import 'package:konn3ctsdk/core/utils/state_mgt/ParticipantController.dart';
 import 'package:konn3ctsdk/core/utils/state_mgt/PresentationController.dart';
 import 'package:konn3ctsdk/core/utils/state_mgt/PullController.dart';
 import 'package:konn3ctsdk/core/utils/state_mgt/SwitchController.dart';
@@ -53,6 +54,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   var pullcontroller = Get.put(PullController());
 
   var presentationcontroller = Get.put(PresentationController());
+  var participantcontroller = Get.put(ParticipantController());
   var deviceSettingscontroller = Get.put(DeviceSettingsController());
   var switchcontroller = Get.put(SwitchController());
 
@@ -92,7 +94,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   // final HomeController controller = Get.put(HomeController(usersList: usersList));
   // final SwitchController switchcontroller = Get.put(SwitchController());
 
-  late Websocket websocket;
   final _captionButtonPressed =
       false.obs; // variable to track caption button visibility
   set captionButtonPressed(value) => _captionButtonPressed.value = value;
@@ -192,9 +193,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     // controller.slideposition =
     isleaving = false;
 
-    if (GetPlatform.isAndroid || GetPlatform.isIOS) {
-      startForegroundService();
-    }
     // Cancel any existing subscription
     _subscription?.cancel();
 
@@ -229,6 +227,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
                   response["fields"] != null &&
                   response["fields"]["loggedOut"] != null &&
                   response["fields"]["loggedOut"])) {
+            isleaving = true;
             stage = 0;
             Navigator.pop(context, isleaving);
           }
@@ -434,6 +433,26 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     debugPrint('PiP enabled? $status');
   }
 
+  var _scale = 1.0.obs;
+  set scale(double value) => _scale.value = value;
+  double get scale => _scale.value;
+
+  var _previousScale = 1.0.obs;
+  set previousScale(double value) => _previousScale.value = value;
+  double get previousScale => _previousScale.value;
+
+  var _offset = Offset.zero.obs;
+  set offset(Offset value) => _offset.value = value;
+  Offset get offset => _offset.value;
+
+  var _lastFocalPoint = Offset.zero.obs;
+  set lastFocalPoint(Offset value) => _lastFocalPoint.value = value;
+  Offset get lastFocalPoint => _lastFocalPoint.value;
+
+  var _previousOffset = Offset.zero.obs;
+  set previousOffset(Offset value) => _previousOffset.value = value;
+  Offset get previousOffset => _previousOffset.value;
+
   @override
   void onReady() {
     // TODO: implement onReady
@@ -490,8 +509,8 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       "k4/donation/${roomdetails['id']}",
       token,
     );
-    print("donation cmddetails");
-    print(cmddetails);
+    // print("donation cmddetails");
+    // print(cmddetails);
     if (cmddetails["success"]) {
       if (cmddetails["data"].isNotEmpty) {
         donate = true;
@@ -777,7 +796,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
     } else {
       isLoading = false;
       if (cmddetails['message'] != "No internet connection") {
-        Get.defaultDialog(content: Text(cmddetails['message']));
+        // Get.defaultDialog(content: Text(cmddetails['message']));
         // showCommonError(cmddetails['message']);
       }
     }
@@ -825,6 +844,23 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
         print("start the meeting again");
       }
     } on Exception {}
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed ||
+        state == AppLifecycleState.detached) {
+      isfloating.value = false;
+    } else {
+      isfloating.value = true;
+      try {
+        enablePip(context: context, autoEnable: false);
+      } catch ($e) {
+        print("Error while enabling pip");
+      }
+    }
+    // _isInForeground = state == AppLifecycleState.resumed;
   }
 
   static const Color red = Color(0xFFFF0000);

@@ -46,9 +46,13 @@ class MethodChannelKonn3ctsdk extends Konn3ctsdkPlatform {
       context: context,
       builder: (BuildContext context) => Konn3ct(),
     );
-    // if (response != null) {
-    //   Get.delete<postjoinController>();
-    // }
+
+    // Add a small delay or delete in the next frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Get.isRegistered<postjoinController>()) {
+        Get.delete<postjoinController>();
+      }
+    });
     return response;
   }
 }
