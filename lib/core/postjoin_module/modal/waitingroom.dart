@@ -55,7 +55,7 @@ class Waitingroom extends GetView<postjoinController> {
 
                   const SizedBox(height: 20),
 
-                  if (logic.mydetails!.fields!.role == "MODERATOR")
+                  if (logic.myDetails!.fields!.role == "MODERATOR")
                     Flexible(
                       child: Column(
                         children: [
@@ -152,7 +152,7 @@ class Waitingroom extends GetView<postjoinController> {
                                 onTap: () {
                                   controller.bigbluebuttonsdkPlugin
                                       .allowPendingUsers(
-                                        logic.waitingparticipant,
+                                        logic.waitingParticipant,
                                         "ALLOW",
                                       );
                                 },
@@ -196,7 +196,7 @@ class Waitingroom extends GetView<postjoinController> {
                                 onTap: () {
                                   controller.bigbluebuttonsdkPlugin
                                       .allowPendingUsers(
-                                        logic.waitingparticipant,
+                                        logic.waitingParticipant,
                                         "DENY",
                                       );
                                 },
@@ -245,12 +245,12 @@ class Waitingroom extends GetView<postjoinController> {
                           Flexible(
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
-                              itemCount: logic.waitingparticipant.length,
+                              itemCount: logic.waitingParticipant.length,
                               itemBuilder: (BuildContext context, int index) {
-                                if (logic.waitingparticipant.isEmpty) {
+                                if (logic.waitingParticipant.isEmpty) {
                                   return Container();
                                 }
-                                final user = logic.waitingparticipant[index];
+                                final user = logic.waitingParticipant[index];
                                 return ListTile(
                                   leading: CircleAvatar(
                                     backgroundImage: NetworkImage(

@@ -1,5 +1,4 @@
 import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
-import 'package:bigbluebuttonsdk/utils/strings.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,21 +16,21 @@ class Floatingscreen extends GetView<postjoinController> {
           builder: (logic) {
             if (controller.iswhiteboard) {
               controller.presentationcontroller.slideposition =
-                  logic.currentslide["fields"]["num"];
-              if (logic.presentationmodel.isNotEmpty &&
+                  logic.currentSlide["fields"]["num"];
+              if (logic.presentationModel.isNotEmpty &&
                   controller
                       .presentationcontroller
                       .selecttoupload
                       .name
                       .isEmpty) {
-                var selectedFile = logic.presentationmodel.where((v) {
+                var selectedFile = logic.presentationModel.where((v) {
                   return v.fields!.current == true;
                 }).toList();
 
                 if (selectedFile.isNotEmpty) {
                   controller.presentationcontroller.selecttoupload =
                       PlatformFile(
-                        name: selectedFile.last.fields.name,
+                        name: selectedFile.last.fields!.name!,
                         size: 0,
                       );
                 } else {
@@ -169,13 +168,15 @@ class ProfileAvatar extends StatelessWidget {
               width: 20,
               height: 20,
               decoration: BoxDecoration(
-                color: Colors.grey.shade600,
+                color: participant.fields!.muted == true
+                    ? Color(0xffCC525F)
+                    : Colors.grey.shade600,
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 participant.fields!.muted == true
-                    ? Icons.mic_sharp
-                    : Icons.mic_off_sharp,
+                    ? Icons.mic_off_sharp
+                    : Icons.mic_sharp,
                 size: 14,
                 color: Colors.white,
               ),

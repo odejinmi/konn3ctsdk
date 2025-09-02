@@ -73,7 +73,7 @@ class Presentation extends GetView<PresentationController> {
                           controller.toupload.remove(controller.selecttoupload);
                         } else if (controller.selecttoupload.size == 0) {
                           // Find and remove the item
-                          var result = logic.presentationmodel.where((v) {
+                          var result = logic.presentationModel.where((v) {
                             return v.fields!.name! ==
                                 controller.selecttoupload.name!;
                           }).toList();
@@ -181,8 +181,8 @@ class Presentation extends GetView<PresentationController> {
                 Obx(() {
                   return Column(
                     children: [
-                      for (int i = 0; i < logic.presentationmodel.length; i++)
-                        item(logic.presentationmodel[i], 0, ""),
+                      for (int i = 0; i < logic.presentationModel.length; i++)
+                        item(logic.presentationModel[i], 0, ""),
                       for (int i = 0; i < controller.toupload.length; i++)
                         item(
                           presentation.Presentationmodel(

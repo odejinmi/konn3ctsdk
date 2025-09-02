@@ -56,7 +56,7 @@ class ShowManageUserSettingsDialog extends GetView<postjoinController> {
                     ),
                     const Divider(),
                     const SizedBox(height: 20),
-                    if (websocket.mydetails!.fields!.role == "MODERATOR")
+                    if (websocket.myDetails!.fields!.role == "MODERATOR")
                       Column(
                         children: [
                           SwitchListTile(

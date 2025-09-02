@@ -817,6 +817,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
         meetingdetails = meetingdetailsFromJson(
           jsonEncode(cmddetails["response"]),
         );
+        print("meetingdetails ${cmddetails["response"]}");
 
         isLoading = false;
         await startroom();

@@ -205,12 +205,12 @@ class _ChatDialogState extends State<ChatDialog> {
                     child: GetBuilder<Websocket>(
                       builder: (logic) {
                         return ListView.builder(
-                          itemCount: logic.getchatMessages(chatid).length,
+                          itemCount: logic.getChatMessages(chatid).length,
                           shrinkWrap: true,
                           padding: const EdgeInsets.only(top: 10, bottom: 10),
                           itemBuilder: (context, index) {
                             return chatMessageCard(
-                              logic.getchatMessages(chatid)[index],
+                              logic.getChatMessages(chatid)[index],
                               postjoincontroller.meetingdetails,
                             );
                           },

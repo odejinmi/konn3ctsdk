@@ -16,7 +16,8 @@ dependencies:
   plugin_platform_interface: ^2.1.8
   get: ^4.7.2
   bigbluebuttonsdk:
-    path: ../bigbluebuttonsdk
+#    path: ../bigbluebuttonsdk
+     git: https://github.com/odejinmi/bigbluebuttonsdk.git
   flutterwave_standard_smart: ^1.0.4
   percent_indicator: ^4.2.5
   lottie: ^3.3.1

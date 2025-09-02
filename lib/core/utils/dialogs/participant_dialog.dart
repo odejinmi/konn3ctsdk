@@ -132,7 +132,7 @@ class ParticipantsDialog extends GetView<ParticipantController> {
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                     subtitle: Text(
-                      participan.fields!.presenter! ? 'Host' : 'Guest',
+                      participan.fields!.role == "MODERATOR" ? 'Host' : 'Guest',
                       style: TextStyle(color: Colors.white, fontSize: 12),
                     ),
                     trailing: Row(
@@ -145,7 +145,7 @@ class ParticipantsDialog extends GetView<ParticipantController> {
                             );
                           },
                           child: Icon(
-                            participan.fields!.muted!
+                            participan.fields!.muted == true
                                 ? Icons.mic_off_outlined
                                 : Icons.mic,
                             color: Colors.white,

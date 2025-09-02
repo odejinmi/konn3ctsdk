@@ -39,6 +39,15 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    lintOptions {
+        disable += "NullSafeMutableLiveData"
+    }
+
+    // Or use the newer syntax if you're using a recent AGP version:
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
 }
 
 flutter {

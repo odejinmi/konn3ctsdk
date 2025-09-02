@@ -40,7 +40,7 @@ class Makedonation extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                'Add a deiscription',
+                'Add a description',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

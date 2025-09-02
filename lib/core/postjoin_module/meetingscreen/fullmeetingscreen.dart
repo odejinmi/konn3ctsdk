@@ -282,7 +282,6 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                         )
                       : IconButton.filled(
                           onPressed: () {
-                            controller.bigbluebuttonsdkPlugin.startcaption();
                             showDialog(
                               barrierDismissible: false,
                               context: context,
@@ -607,7 +606,7 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                             builder: (logic) {
                               if (logic.remoteRTCVideoRenderer.srcObject !=
                                   null) {
-                                if (logic.ismesharing) {
+                                if (logic.isMeSharing) {
                                   return ShareScreenCard();
                                 } else {
                                   return remotescreenshare(logic, orientation);
@@ -616,14 +615,14 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                                 controller
                                         .presentationcontroller
                                         .slideposition =
-                                    logic.currentslide["fields"]["num"];
-                                if (logic.presentationmodel.isNotEmpty &&
+                                    logic.currentSlide["fields"]["num"];
+                                if (logic.presentationModel.isNotEmpty &&
                                     controller
                                         .presentationcontroller
                                         .selecttoupload
                                         .name
                                         .isEmpty) {
-                                  var selectedFile = logic.presentationmodel
+                                  var selectedFile = logic.presentationModel
                                       .where((v) {
                                         return v.fields!.current == true;
                                       })
@@ -633,7 +632,7 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                                     controller
                                         .presentationcontroller
                                         .selecttoupload = PlatformFile(
-                                      name: selectedFile.last.fields.name,
+                                      name: selectedFile.last.fields!.name!,
                                       size: 0,
                                     );
                                   } else {
@@ -893,42 +892,6 @@ class Fullmeetingscreen extends GetView<postjoinController> {
     });
   }
 
-  // =============Widget for User Rounded Card Top Horizontal Carousel Display==========================================
-  Widget _buildRoundCard(Participant participant) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: Container(
-        width: 120,
-        height: 30,
-        padding: const EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: const Color.fromRGBO(34, 116, 81, 1),
-            width: 1,
-          ),
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(participant.fields!.avatar!),
-            ),
-            Expanded(
-              child: Text(
-                participant.fields!.name!,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Icon(Icons.mic),
-          ],
-        ),
-      ),
-    );
-  }
-
   // Helper function to build the participant widget
   Widget _buildParticipantWidget(
     Participant participant,
@@ -956,36 +919,53 @@ class Fullmeetingscreen extends GetView<postjoinController> {
                           RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
                     ),
                   )
-                : Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: participant.fields!.talking == true
-                            ? Colors.white
-                            : Colors.transparent,
-                        width: 3,
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 10,
+                    children: [
+                      Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: participant.fields!.talking == true
+                                ? Colors.white
+                                : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                        child: ClipOval(
+                          child: Image.network(
+                            participant.fields!.avatar!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Text(
+                                generateInitials(participant.fields!.name!),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.98),
+                                  fontSize: 24,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    ),
-                    child: ClipOval(
-                      child: Image.network(
-                        participant.fields!.avatar!,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Text(
-                            generateInitials(participant.fields!.name!),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.98),
-                              fontSize: 24,
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                            ),
-                          );
-                        },
+                      Text(
+                        participant.fields!.name!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.98),
+                          fontSize: 11,
+                          fontFamily: 'Inter',
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
           ),
           Positioned(
