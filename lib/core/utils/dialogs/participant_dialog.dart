@@ -140,7 +140,7 @@ class ParticipantsDialog extends GetView<ParticipantController> {
                       children: [
                         InkWell(
                           onTap: () {
-                            controller.bigbluebuttonsdkPlugin.muteallusers(
+                            controller.bigbluebuttonsdkPlugin.muteauser(
                               userid: participan.fields!.userId!,
                             );
                           },
@@ -172,10 +172,9 @@ class ParticipantsDialog extends GetView<ParticipantController> {
                                   if (value == 1) {
                                     _showChangeRoleDialog(participan, context);
                                   } else if (value == 2) {
-                                    controller.bigbluebuttonsdkPlugin
-                                        .muteallusers(
-                                          userid: participan.fields!.userId!,
-                                        );
+                                    controller.bigbluebuttonsdkPlugin.muteauser(
+                                      userid: participan.fields!.userId!,
+                                    );
                                     // put function here
                                   } else if (value == 3) {
                                     if (logic

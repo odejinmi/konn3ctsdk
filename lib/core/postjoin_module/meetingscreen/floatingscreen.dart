@@ -9,7 +9,7 @@ class Floatingscreen extends GetView<postjoinController> {
   Widget build(BuildContext context) {
     Size screenSize = MediaQuery.of(context).size;
     return Obx(() {
-      controller.check;
+      controller.donationcontroller.check;
       return Scaffold(
         key: controller.scaffoldKey,
         body: GetBuilder<Websocket>(
@@ -165,19 +165,19 @@ class ProfileAvatar extends StatelessWidget {
             top: 5,
             right: 5,
             child: Container(
-              width: 20,
-              height: 20,
+              padding: EdgeInsets.all(5.0),
               decoration: BoxDecoration(
-                color: participant.fields!.muted == true
+                border: Border.all(color: Colors.white),
+                color: participant.fields?.muted == true
                     ? Color(0xffCC525F)
-                    : Colors.grey.shade600,
-                shape: BoxShape.circle,
+                    : Color(0xff3E8466),
+                borderRadius: BorderRadius.circular(50),
               ),
               child: Icon(
-                participant.fields!.muted == true
-                    ? Icons.mic_off_sharp
-                    : Icons.mic_sharp,
-                size: 14,
+                participant.fields?.muted == true
+                    ? Icons.mic_off_outlined
+                    : Icons.mic,
+                size: 15,
                 color: Colors.white,
               ),
             ),

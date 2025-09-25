@@ -193,103 +193,121 @@ class CaptionDialog extends GetView<postjoinController> {
                               bottomLeft: Radius.circular(10),
                             ),
                           ),
-                          child: Scrollbar(
-                            child: ListView(
-                              scrollDirection: Axis.vertical,
-                              children: const [
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'English',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
+                          // child: Scrollbar(
+                          //   child: ListView(
+                          //     scrollDirection: Axis.vertical,
+                          //     children: const [
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'English',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Italiano',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Polski',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Espanol',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Yoruba',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Igbo',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       ListTile(
+                          //         visualDensity: VisualDensity(
+                          //           horizontal: 0,
+                          //           vertical: -4,
+                          //         ),
+                          //         title: Text(
+                          //           'Hausa',
+                          //           style: TextStyle(
+                          //             color: Colors.white,
+                          //             fontSize: 16,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          child: ListView.builder(
+                            itemCount: logic.availableLanguages.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                visualDensity: VisualDensity(
+                                  horizontal: 0,
+                                  vertical: -4,
+                                ),
+                                title: Text(
+                                  logic.availableLanguages[index]["name"],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
                                   ),
                                 ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Italiano',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Polski',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Espanol',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Yoruba',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Igbo',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                                ListTile(
-                                  visualDensity: VisualDensity(
-                                    horizontal: 0,
-                                    vertical: -4,
-                                  ),
-                                  title: Text(
-                                    'Hausa',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
                         ),
                       ],

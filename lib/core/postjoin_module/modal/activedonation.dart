@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:konn3ctsdk/core/utils/diorequest.dart';
+import 'package:konn3ctsdk/core/postjoin_module/modal/makedonation.dart';
 
-import '../postjoin_controller.dart';
+import '../../utils/state_mgt/DonationController.dart';
 
-class Activedonation extends StatelessWidget {
+class Activedonation extends GetView<DonationController> {
   const Activedonation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var postjoincontroller = Get.find<postjoinController>();
     // Original DateTime string
-    String originalDateTime =
-        postjoincontroller.donationdetails[0]["created_at"];
+    String originalDateTime = controller.donationdetails[0]["created_at"];
 
     // Parse the string to DateTime
     DateTime parsedDate = DateTime.parse(originalDateTime);
@@ -21,12 +19,22 @@ class Activedonation extends StatelessWidget {
     // Define the desired output format
     String formattedDate = DateFormat('dd/MM/yyyy hh:mma').format(parsedDate);
     return Obx(() {
-      print(postjoincontroller.donationdetails);
       return Container(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(height: 40),
+            Row(
+              children: [
+                Spacer(),
+                IconButton(
+                  icon: Icon(Icons.close, color: Colors.white, size: 24),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
             Text(
               'Active Donation',
               style: TextStyle(
@@ -51,7 +59,7 @@ class Activedonation extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  postjoincontroller.donationdetails[0]["name"],
+                  controller.donationdetails[0]["name"],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
@@ -95,7 +103,7 @@ class Activedonation extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '0',
+                    controller.donatedamount,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -110,7 +118,7 @@ class Activedonation extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.pop(context);
-                patchMeeting();
+                controller.enddonation();
               },
               child: Container(
                 width: 151,
@@ -137,42 +145,48 @@ class Activedonation extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(height: 20),
+            InkWell(
+              onTap: () {
+                Navigator.pop(context);
+                showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    backgroundColor: Color(0xFF3E8466),
+                    content: Makedonation(),
+                  ),
+                );
+              },
+              child: Container(
+                width: 151,
+                height: 48,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                decoration: ShapeDecoration(
+                  color: Color(0xFF5D957E),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  'Donate',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.9800000190734863),
+                    fontSize: 16,
+                    fontFamily: 'Inter',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       );
     });
-  }
-
-  void patchMeeting() async {
-    var postjoincontroller = Get.find<postjoinController>();
-    // if (nameController.value.text == "") {
-    //   showCommonError("Your name can not be empty.");
-    //   return;
-    // }
-    //
-    // if (emailController.value.text == "") {
-    //   showCommonError("Your email can not be empty.");
-    //   return;
-    // }
-
-    var json_body;
-    json_body = {"status": 0};
-    print("donation json_body");
-    print(json_body);
-
-    https: //dev.konn3ct.ng/api/k4/donation/20
-    print("k4/donation/${postjoincontroller.donationdetails[0]["id"]}");
-    var cmddetails = await Diorequest().patch(
-      "k4/donation/${postjoincontroller.donationdetails[0]["id"]}",
-      json_body,
-      postjoincontroller.token,
-    );
-    // print("donation cmddetails patch");
-    // print(cmddetails);
-    // var cmddetails = await Diorequest().get("start-a-room/$id");
-
-    if (cmddetails['success']) {
-      postjoincontroller.donate = false;
-    } else {}
   }
 }

@@ -10,6 +10,7 @@ import 'package:konn3ctsdk/core/utils/dialogs/donations_dialog.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/polls_dialog.dart';
 import 'package:konn3ctsdk/core/utils/dialogs/settings.dart';
 
+import '../postjoin_module/modal/howLayoutSettingsDialog.dart';
 import 'dialogs/chat.dart';
 
 class DrawerComp extends StatefulWidget {
@@ -33,37 +34,37 @@ class _DrawerCompState extends State<DrawerComp> {
               padding: EdgeInsets.zero,
               children: [
                 const SizedBox(height: 15),
-                if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
-                        null &&
-                    postjoincontroller
-                            .bigbluebuttonsdkPlugin
-                            .mydetails!
-                            .fields!
-                            .role ==
-                        "MODERATOR")
-                  Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(
-                          Icons.radio_button_checked,
-                          size: 20,
-                        ),
-                        title: const Text(
-                          'Breakout Room',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                        ),
-                        iconColor: Colors.white,
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                      const Divider(),
-                    ],
-                  ),
+                // if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
+                //         null &&
+                //     postjoincontroller
+                //             .bigbluebuttonsdkPlugin
+                //             .mydetails!
+                //             .fields!
+                //             .role ==
+                //         "MODERATOR")
+                //   Column(
+                //     children: [
+                //       ListTile(
+                //         leading: const Icon(
+                //           Icons.radio_button_checked,
+                //           size: 20,
+                //         ),
+                //         title: const Text(
+                //           'Breakout Room',
+                //           style: TextStyle(
+                //             fontWeight: FontWeight.w500,
+                //             fontSize: 14,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //         iconColor: Colors.white,
+                //         onTap: () {
+                //           Navigator.pop(context);
+                //         },
+                //       ),
+                //       const Divider(),
+                //     ],
+                //   ),
                 if (postjoincontroller.bigbluebuttonsdkPlugin.mydetails !=
                         null &&
                     postjoincontroller
@@ -161,7 +162,17 @@ class _DrawerCompState extends State<DrawerComp> {
                     size: 20,
                   ),
                   iconColor: Colors.white,
-                  onTap: () {},
+                  onTap: () {
+                    showGeneralDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      barrierColor: Colors.transparent,
+                      transitionDuration: const Duration(milliseconds: 400),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ShowLayoutSettingsDialog();
+                      },
+                    );
+                  },
                 ),
                 // ListTile(
                 //   leading: Image.asset(
@@ -310,13 +321,7 @@ class _DrawerCompState extends State<DrawerComp> {
                     ),
                     iconColor: Colors.white,
                     onTap: () {
-                      postjoincontroller.bigbluebuttonsdkPlugin.muteallusers(
-                        userid: postjoincontroller
-                            .bigbluebuttonsdkPlugin
-                            .mydetails!
-                            .fields!
-                            .userId!,
-                      );
+                      postjoincontroller.bigbluebuttonsdkPlugin.muteallusers();
                       Navigator.pop(context);
                     },
                   ),
@@ -413,7 +418,7 @@ class _DrawerCompState extends State<DrawerComp> {
                     iconColor: Colors.white,
                     onTap: () {
                       Navigator.pop(context);
-                      if (postjoincontroller.donate) {
+                      if (postjoincontroller.donationcontroller.donate) {
                         SnackBar(
                           content: Text(
                             "You still have an active donation",

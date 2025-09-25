@@ -1,4 +1,6 @@
 import 'package:bigbluebuttonsdk/bigbluebuttonsdk.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
@@ -17,11 +19,14 @@ class _ChatDialogState extends State<ChatDialog> {
   final List<Map<String, dynamic>> menuItems = [
     {'name': 'Everyone', 'icon': Icons.people_alt_outlined},
     {'name': 'Raised Hand', 'icon': Icons.back_hand_outlined},
-    {'name': 'Item 3'},
-    {'name': 'Item 4'},
+    // {'name': 'Item 3'},
+    // {'name': 'Item 4'},
   ];
 
+  final _scrollController = ScrollController();
+
   bool notification = true;
+  bool isEmojiVisible = false;
 
   dynamic selectedItem;
 
@@ -90,7 +95,7 @@ class _ChatDialogState extends State<ChatDialog> {
                         ),
                         const SizedBox(width: 20),
                         Container(
-                          width: 150,
+                          width: 155,
                           height: 38,
                           padding: const EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
@@ -218,6 +223,36 @@ class _ChatDialogState extends State<ChatDialog> {
                       },
                     ),
                   ),
+                  isEmojiVisible
+                      ? SizedBox(
+                          height: 250,
+                          child: EmojiPicker(
+                            textEditingController: messageController,
+                            scrollController: _scrollController,
+                            // onEmojiSelected: (category, emoji) =>
+                            //     _onEmojiSelected(emoji),
+                            config: Config(
+                              height: 256,
+                              checkPlatformCompatibility: true,
+                              viewOrderConfig: const ViewOrderConfig(),
+                              emojiViewConfig: EmojiViewConfig(
+                                // Issue: https://github.com/flutter/flutter/issues/28894
+                                emojiSizeMax:
+                                    28 *
+                                    (foundation.defaultTargetPlatform ==
+                                            TargetPlatform.iOS
+                                        ? 1.2
+                                        : 1.0),
+                              ),
+                              skinToneConfig: const SkinToneConfig(),
+                              categoryViewConfig: const CategoryViewConfig(),
+                              bottomActionBarConfig:
+                                  const BottomActionBarConfig(),
+                              searchViewConfig: const SearchViewConfig(),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink(),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 0),
                     child: TextField(
@@ -228,12 +263,18 @@ class _ChatDialogState extends State<ChatDialog> {
                           chatid: chatid,
                         );
                       },
+                      onTap: () {
+                        isEmojiVisible = false;
+                      },
                       decoration: InputDecoration(
                         suffixIcon: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                isEmojiVisible = true;
+                                setState(() {});
+                              },
                               icon: const Icon(
                                 Icons.sentiment_satisfied_alt_outlined,
                                 color: Colors.white,
@@ -249,6 +290,8 @@ class _ChatDialogState extends State<ChatDialog> {
                                       );
                                   messageController.clear();
                                 }
+                                isEmojiVisible = false;
+                                setState(() {});
                               },
                               icon: const Icon(
                                 Icons.send_outlined,

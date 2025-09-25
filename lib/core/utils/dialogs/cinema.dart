@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
+import 'advanced_you_tube_player.dart';
+
 class Cinema extends StatefulWidget {
   const Cinema({super.key});
 
@@ -71,7 +73,7 @@ class _CinemaState extends State<Cinema> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 300),
+                  const Spacer(),
 
                   InkWell(
                     onTap: () {
@@ -98,6 +100,7 @@ class _CinemaState extends State<Cinema> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 30),
                 ],
               ),
             );
@@ -143,6 +146,8 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
     }
   }
 
+  String? videoId;
+
   @override
   void initState() {
     super.initState();
@@ -156,6 +161,14 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
         controlsVisibleAtStart: true,
       ),
     );
+    // Usage
+    videoId = YouTubeHelper.extractVideoId(
+      widget.videoLink["fields"]["externalVideoUrl"],
+    );
+    //     if (videoId != null) {
+    // // Use the video ID
+    //       AdvancedYouTubePlayer(videoId: videoId);
+    //     }
   }
 
   @override
@@ -166,78 +179,55 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
         builder: (context, orientation) {
           debugPrint('Device orientation: $orientation');
           isFullscreen = orientation == Orientation.landscape;
-          return isFullscreen
-              /// Landscape Layout
-              ? Center(
-                  child: YoutubePlayerBuilder(
-                    player: YoutubePlayer(
-                      controller: _controller,
-                      showVideoProgressIndicator: true,
-                      progressIndicatorColor: const Color.fromRGBO(
-                        62,
-                        132,
-                        102,
-                        1,
-                      ),
-                      progressColors: const ProgressBarColors(
-                        playedColor: Color.fromRGBO(62, 132, 102, 1),
-                        handleColor: Color.fromRGBO(62, 132, 102, 1),
-                      ),
-                    ),
-                    builder: (context, player) => player,
-                  ),
-                )
-              /// Portrait Layout
-              : Center(
-                  child: YoutubePlayerBuilder(
-                    player: YoutubePlayer(
-                      aspectRatio: 9 / 16,
-                      controller: _controller,
-                      showVideoProgressIndicator: true,
-                      progressIndicatorColor: const Color.fromRGBO(
-                        62,
-                        132,
-                        102,
-                        1,
-                      ),
-                      progressColors: const ProgressBarColors(
-                        playedColor: Color.fromRGBO(62, 132, 102, 1),
-                        handleColor: Color.fromRGBO(62, 132, 102, 1),
-                      ),
-                    ),
-                    builder: (context, player) => player,
-                  ),
-                );
+          return Center(
+            child: AdvancedYouTubePlayer(videoId: videoId!, autoPlay: true),
+          );
         },
       ),
 
       /// Stop Broadcast Button
-      floatingActionButton: Align(
-        alignment: const Alignment(1, -0.75),
-        child: InkWell(
-          onTap: () {
-            _showEndBroadcastDialog();
-          },
-          child: Container(
-            width: 151,
-            height: 48,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            decoration: BoxDecoration(
-              color: const Color.fromRGBO(204, 82, 95, 0.2),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color.fromRGBO(204, 82, 95, 1)),
-            ),
-            child: const Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.close, color: Colors.white),
-                  Text('Stop Broadcast', style: TextStyle(color: Colors.white)),
-                ],
-              ),
-            ),
-          ),
-        ),
+      floatingActionButton: GetBuilder<postjoinController>(
+        builder: (postjoincontroller) {
+          return postjoincontroller
+                      .bigbluebuttonsdkPlugin
+                      .mydetails!
+                      .fields!
+                      .role ==
+                  "MODERATOR"
+              ? Align(
+                  alignment: const Alignment(1, -0.75),
+                  child: InkWell(
+                    onTap: () {
+                      _showEndBroadcastDialog();
+                    },
+                    child: Container(
+                      width: 151,
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(204, 82, 95, 0.2),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: const Color.fromRGBO(204, 82, 95, 1),
+                        ),
+                      ),
+                      child: const Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.close, color: Colors.white),
+                            Text(
+                              'Stop Broadcast',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -340,7 +330,7 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
                               onTap: () {
                                 _controller.pause();
 
-                                _enableFullscreen(true);
+                                // _enableFullscreen(true);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 postjoincontroller.bigbluebuttonsdkPlugin

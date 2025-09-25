@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutterwave_standard_smart/flutterwave.dart';
 import 'package:get/get.dart';
 
-import '../postjoin_controller.dart';
+import '../../utils/state_mgt/DonationController.dart';
 
-class Makedonation extends StatelessWidget {
+class Makedonation extends GetView<DonationController> {
   const Makedonation({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var postjoincontroller = Get.find<postjoinController>();
     return Obx(() {
       return Container(
         child: Form(
-          key: postjoincontroller.formKey,
+          key: controller.formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              Row(
+                children: [
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.close, color: Colors.white, size: 24),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+              // SizedBox(height: 20),
               Text(
                 'Donation Name:',
                 style: TextStyle(
@@ -30,7 +39,7 @@ class Makedonation extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                postjoincontroller.donationdetails[0]["name"],
+                controller.donationdetails[0]["name"],
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -62,7 +71,7 @@ class Makedonation extends StatelessWidget {
                 ),
                 child: TextFormField(
                   cursorColor: Colors.white,
-                  controller: postjoincontroller.donationdescriptionController,
+                  controller: controller.donationdescriptionController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "this field cannot be empty";
@@ -112,7 +121,7 @@ class Makedonation extends StatelessWidget {
                 ),
                 child: TextField(
                   cursorColor: Colors.white,
-                  controller: postjoincontroller.donationuniquenumberController,
+                  controller: controller.donationuniquenumberController,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -130,7 +139,7 @@ class Makedonation extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              postjoincontroller.donationdetails[0]["type"] == 2
+              controller.donationdetails[0]["type"] == 2
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -146,9 +155,9 @@ class Makedonation extends StatelessWidget {
                         SizedBox(height: 5),
                         InkWell(
                           onTap: () {
-                            postjoincontroller.amounttodonate =
-                                postjoincontroller.donationdetails[0]["amount"]
-                                    .toString();
+                            controller.amounttodonate = controller
+                                .donationdetails[0]["amount"]
+                                .toString();
                           },
                           child: Container(
                             height: 48,
@@ -161,8 +170,7 @@ class Makedonation extends StatelessWidget {
                               shape: RoundedRectangleBorder(
                                 side: BorderSide(
                                   width: 1,
-                                  color:
-                                      postjoincontroller.amounttodonate.isEmpty
+                                  color: controller.amounttodonate.isEmpty
                                       ? Colors.transparent
                                       : Color(0xFF68A48B),
                                 ),
@@ -171,7 +179,7 @@ class Makedonation extends StatelessWidget {
                             ),
 
                             child: Text(
-                              postjoincontroller.donationdetails[0]["amount"]
+                              controller.donationdetails[0]["amount"]
                                   .toString(),
                               style: TextStyle(
                                 color: Colors.white,
@@ -217,18 +225,16 @@ class Makedonation extends StatelessWidget {
                           child: TextFormField(
                             cursorColor: Colors.white,
                             onChanged: (value) {
-                              postjoincontroller.amounttodonate = value;
+                              controller.amounttodonate = value;
                             },
                             validator: (value) {
-                              if (postjoincontroller
-                                          .donationdetails[0]["type"] !=
-                                      2 &&
+                              if (controller.donationdetails[0]["type"] != 2 &&
                                   (value == null || value.isEmpty)) {
                                 return "this field cannot be empty";
                               }
                               return null;
                             },
-                            // controller: donationNameController,
+                            controller: controller.donationamountController,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
@@ -260,7 +266,7 @@ class Makedonation extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: () async {
-                        postjoincontroller.check = !postjoincontroller.check;
+                        controller.check = !controller.check;
                       },
                       child: Opacity(
                         opacity: 0.80,
@@ -268,7 +274,7 @@ class Makedonation extends StatelessWidget {
                           width: 20,
                           height: 20,
                           decoration: ShapeDecoration(
-                            color: postjoincontroller.check
+                            color: controller.check
                                 ? const Color(0xFF3E8466)
                                 : Colors.white,
                             shape: RoundedRectangleBorder(
@@ -309,43 +315,44 @@ class Makedonation extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (!postjoincontroller.isLoading &&
-                          postjoincontroller.formKey.currentState!.validate()) {
+                      if (!controller.isLoading &&
+                          controller.formKey.currentState!.validate()) {
                         // controller.checkingMeeting();
 
-                        final Customer customer = Customer(
-                          name: postjoincontroller.meetingdetails.fullname,
-                          phoneNumber: '08166939205',
-                          email: postjoincontroller.meetingdetails.externUserID,
-                        );
-                        final Flutterwave flutterwave = Flutterwave(
-                          context: context,
-                          publicKey:
-                              'FLWPUBK_TEST-f3450fbb82c4ba25f0554ae3e518df11-X',
-                          currency: "naira",
-                          redirectUrl: "add-your-redirect-url-here",
-                          txRef: DateTime.now().toString(),
-                          amount: postjoincontroller.amounttodonate,
-                          customer: customer,
-                          paymentOptions: "ussd, card, barter, payattitude",
-                          customization: Customization(
-                            title:
-                                postjoincontroller.donationdetails[0]["name"],
-                            description: 'Konn3ct Donation',
-                            logo:
-                                'https://konn3ct.com/assets/images/group99@2x.png',
-                          ),
-                          meta: {
-                            "donation_id": postjoincontroller
-                                .donationdetails[0]["donationCreatorId"],
-                            "uniqueNumber": postjoincontroller
-                                .donationuniquenumberController,
-                            "description": postjoincontroller
-                                .donationdescriptionController,
-                            "isAnonymous": postjoincontroller.check,
-                          },
-                          isTestMode: false,
-                        );
+                        // final Customer customer = Customer(
+                        //   name: controller.meetingdetails!.fullname,
+                        //   phoneNumber: '08166939205',
+                        //   email: controller.meetingdetails!.externMeetingId,
+                        // );
+                        // final Flutterwave flutterwave = Flutterwave(
+                        //   context: context,
+                        //   publicKey:
+                        //       'FLWPUBK_TEST-f3450fbb82c4ba25f0554ae3e518df11-X',
+                        //   currency: "naira",
+                        //   redirectUrl: "add-your-redirect-url-here",
+                        //   txRef: DateTime.now().toString(),
+                        //   amount: controller.amounttodonate,
+                        //   customer: customer,
+                        //   paymentOptions: "ussd, card, barter, payattitude",
+                        //   customization: Customization(
+                        //     title: controller.donationdetails[0]["name"],
+                        //     description: 'Konn3ct Donation',
+                        //     logo:
+                        //         'https://konn3ct.com/assets/images/group99@2x.png',
+                        //   ),
+                        //   meta: {
+                        //     "donation_id": controller
+                        //         .donationdetails[0]["donationCreatorId"],
+                        //     "uniqueNumber":
+                        //         controller.donationuniquenumberController,
+                        //     "description":
+                        //         controller.donationdescriptionController,
+                        //     "isAnonymous": controller.check,
+                        //   },
+                        //   isTestMode: false,
+                        // );
+                        Get.back();
+                        controller.paydonation();
                       }
                     },
                     child: Container(

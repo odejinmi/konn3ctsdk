@@ -19,6 +19,7 @@ import 'package:konn3ctsdk/core/utils/state_mgt/SwitchController.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
+import '../utils/state_mgt/DonationController.dart';
 import '../utils/strings.dart';
 import 'modal/pollsresult.dart';
 import 'modal/pullquestionandanswer.dart';
@@ -53,6 +54,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
 
   var pullcontroller = Get.put(PullController());
 
+  var donationcontroller = Get.put(DonationController());
   var presentationcontroller = Get.put(PresentationController());
   var participantcontroller = Get.put(ParticipantController());
   var deviceSettingscontroller = Get.put(DeviceSettingsController());
@@ -73,10 +75,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   final _isleaving = false.obs;
   set isleaving(value) => _isleaving.value = value;
   get isleaving => _isleaving.value;
-
-  final _amounttodonate = ''.obs;
-  set amounttodonate(value) => _amounttodonate.value = value;
-  get amounttodonate => _amounttodonate.value;
 
   final _iswhiteboard = false.obs;
   set iswhiteboard(value) => _iswhiteboard.value = value;
@@ -111,17 +109,9 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   set isstartroom(value) => _isstartroom.value = value;
   get isstartroom => _isstartroom.value;
 
-  final _donate = false.obs;
-  set donate(value) => _donate.value = value;
-  get donate => _donate.value;
-
   final _isLoading = false.obs;
   set isLoading(value) => _isLoading.value = value;
   get isLoading => _isLoading.value;
-
-  final _check = false.obs;
-  set check(value) => _check.value = value;
-  get check => _check.value;
 
   final bigbluebuttonsdkPlugin = Bigbluebuttonsdk();
 
@@ -132,10 +122,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   final _roomdetails = {}.obs;
   set roomdetails(value) => _roomdetails.value = value;
   get roomdetails => _roomdetails.value;
-
-  final _donationdetails = [].obs;
-  set donationdetails(value) => _donationdetails.value = value;
-  get donationdetails => _donationdetails.value;
 
   final _webrtctoken = "".obs;
   set webrtctoken(value) => _webrtctoken.value = value;
@@ -148,7 +134,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   get selectedOption => _selectedOption.value;
 
   var formKey = GlobalKey<FormState>();
-  Timer? _timer;
 
   final _zoomLevel = 1.0.obs; // Initial zoom level (100%)
   set zoomLevel(value) => _zoomLevel.value = value;
@@ -183,9 +168,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
 
   StreamSubscription? _subscription;
 
-  final donationdescriptionController = TextEditingController();
-  final donationuniquenumberController = TextEditingController();
-
   bool hasUnsavedChanges = true;
 
   @override
@@ -210,12 +192,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       meetingdetails: meetingdetails,
     );
     bigbluebuttonsdkPlugin.startroom();
-    checkdonation();
-    // Set up a timer to call checkdonation() every 10 seconds
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
-      // obj = "";
-      checkdonation();
-    });
+    donationcontroller.init(meetingdetails, token, roomdetails);
 
     // Cancel any existing subscription
     _subscription ??= bigbluebuttonsdkPlugin.stream.listen((event) async {
@@ -232,17 +209,37 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
             Navigator.pop(context, isleaving);
           }
           break;
+        case "meetings":
+          if (response["msg"] == "changed" &&
+              response["fields"] != null &&
+              response["fields"]["meetingEnded"] != null &&
+              response["fields"]["meetingEnded"]) {
+            isleaving = true;
+            stage = 0;
+            // I/flutter ( 4834): {"msg":"changed","collection":"meetings","id":"L8HtzS6oxEDBqtMCg","fields":{"meetingEnded":true,"meetingEndedBy":"w_tanfjizh3aep","meetingEndedReason":"ENDED_AFTER_USER_LOGGED_OUT"}}
+            Navigator.pop(context, isleaving);
+          }
+          break;
         case "external-video-meetings":
-          if (response["fields"] != null &&
-              response["fields"]["externalVideoUrl"] != null) {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) => ShowVideoScreen(
-                videoLink: response,
-                ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
-              ),
-            );
+          print("external-video-meetings");
+          print(response);
+          if (response["msg"] == "added" || response["msg"] == "changed") {
+            if (response["fields"] != null &&
+                response["fields"]["externalVideoUrl"] != null) {
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) => ShowVideoScreen(
+                  videoLink: response,
+                  ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
+                ),
+              );
+            } else if (response["fields"] != null &&
+                response["fields"]["externalVideoUrl"] == null) {
+              Get.back();
+            }
+          } else if (response["msg"] == "removed") {
+            Get.back();
           }
           break;
         case "polls":
@@ -461,7 +458,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
 
   @override
   void onClose() {
-    _timer?.cancel();
     stopfloating();
     closeCamera();
     // TODO: implement onClose
@@ -498,26 +494,6 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       // } else {
       //   donate = false;
       // }
-      // Get.offNamed(
-      // Routes.POSTJOIN, arguments: {"token": webtoken,"meetingdetails":cmddetails["response"]});
-      // update();
-    } else {}
-  }
-
-  void checkdonation() async {
-    var cmddetails = await Diorequest().get(
-      "k4/donation/${roomdetails['id']}",
-      token,
-    );
-    // print("donation cmddetails");
-    // print(cmddetails);
-    if (cmddetails["success"]) {
-      if (cmddetails["data"].isNotEmpty) {
-        donate = true;
-        donationdetails = cmddetails["data"];
-      } else {
-        donate = false;
-      }
       // Get.offNamed(
       // Routes.POSTJOIN, arguments: {"token": webtoken,"meetingdetails":cmddetails["response"]});
       // update();

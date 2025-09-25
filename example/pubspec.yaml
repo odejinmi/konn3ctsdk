@@ -42,10 +42,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  cryptography: ^2.7.0
+  encrypt: ^5.0.3
 
 
 dependency_overrides:
   flutter_webrtc: ^0.14.2
+#    git:
+#      url: https://github.com/flutter-webrtc/flutter-webrtc.git
+#      ref: main
 #  callkeep: ^0.3.3
 #  flutter_callkeep: ^1.0.0
 # For information on the generic Dart part of this file, see the
