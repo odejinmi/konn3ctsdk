@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   bigbluebuttonsdk
   emoji_picker_flutter
+  flutter_sound
   flutter_webrtc
   konn3ctsdk
   open_file_linux
