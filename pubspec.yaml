@@ -16,8 +16,8 @@ dependencies:
   plugin_platform_interface: ^2.1.8
   get: ^4.7.3
   bigbluebuttonsdk:
-    path: ../bigbluebuttonsdk
-#     git: https://github.com/odejinmi/bigbluebuttonsdk.git
+#    path: ../bigbluebuttonsdk
+     git: https://github.com/odejinmi/bigbluebuttonsdk.git
   percent_indicator: ^4.2.5
   lottie: ^3.3.0
   camera: ^0.11.2+1
