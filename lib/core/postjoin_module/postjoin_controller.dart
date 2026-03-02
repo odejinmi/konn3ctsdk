@@ -191,208 +191,362 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
       webrtctoken: webrtctoken,
       meetingdetails: meetingdetails,
     );
-    bigbluebuttonsdkPlugin.startroom();
+    bigbluebuttonsdkPlugin.Startroom(
+        leavemeeting: (value) {
+          isleaving = true;
+          stage = 0;
+          Navigator.pop(context, isleaving);
+          },
+        externalvideomeetings: (value) {
+          if (value) {
+
+            //           showDialog(
+            //             barrierDismissible: false,
+            //             context: context,
+            //             builder: (BuildContext context) => ShowVideoScreen(
+            //               videoLink: response,
+            //               ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
+            //             ),
+            //           );
+          }  else{
+            Navigator.pop(context);
+          }
+        },
+        polls: (value) {
+          if(value){
+            // showDialog(
+            //   barrierDismissible: false,
+            //   context: context,
+            //   builder: (BuildContext context) =>
+            //       Pullquestionandanswer(json: response),
+            // );
+          }
+        }, currentpoll: (value) {
+      //         pullcontroller.pullresult = response;
+      //         showDialog(
+      //           barrierDismissible: false,
+      //           context: context,
+      //           builder: (BuildContext context) => Pollsresult(json: response),
+      //         ).then((value) {
+      //           Future.delayed(const Duration(seconds: 3), () {
+      //             pullcontroller.pullresult = {};
+      //           });
+      //         });
+              },
+      breakouts: (value){
+
+        //       Get.dialog(
+        //         Scaffold(
+        //           // backgroundColor: const Color.fromRGBO(0, 0, 0, 0.76),
+        //           body: Center(
+        //             child: Container(
+        //               width: 360,
+        //               height: 664,
+        //               decoration: const BoxDecoration(
+        //                 color: Color.fromRGBO(62, 132, 102, 1),
+        //                 borderRadius: BorderRadius.all(Radius.circular(16)),
+        //               ),
+        //               child: Padding(
+        //                 padding: const EdgeInsets.symmetric(horizontal: 25),
+        //                 child: Column(
+        //                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        //                   children: [
+        //                     Text(
+        //                       'DURATIONS',
+        //                       style: TextStyle(
+        //                         color: Colors.white,
+        //                         fontSize: 16,
+        //                         fontFamily: 'Inter',
+        //                         fontWeight: FontWeight.w500,
+        //                         height: 0.08,
+        //                         letterSpacing: 0.10,
+        //                       ),
+        //                     ),
+        //                     Container(
+        //                       decoration: ShapeDecoration(
+        //                         shape: RoundedRectangleBorder(
+        //                           side: BorderSide(
+        //                             width: 1,
+        //                             color: Color(0xFF5D957E),
+        //                           ),
+        //                           borderRadius: BorderRadius.circular(5),
+        //                         ),
+        //                       ),
+        //                       child: Row(
+        //                         mainAxisSize: MainAxisSize.min,
+        //                         mainAxisAlignment: MainAxisAlignment.center,
+        //                         crossAxisAlignment: CrossAxisAlignment.center,
+        //                         children: [
+        //                           Text(
+        //                             '14:39',
+        //                             style: TextStyle(
+        //                               color: Colors.white.withOpacity(
+        //                                 0.9800000190734863,
+        //                               ),
+        //                               fontSize: 30,
+        //                               fontFamily: 'Inter',
+        //                               fontWeight: FontWeight.w500,
+        //                               height: 0.02,
+        //                               letterSpacing: 0.10,
+        //                             ),
+        //                           ),
+        //                         ],
+        //                       ),
+        //                     ),
+        //                     Row(
+        //                       children: [
+        //                         Expanded(
+        //                           child: Column(
+        //                             children: [
+        //                               Text(
+        //                                 'Room 1 (0)',
+        //                                 style: TextStyle(
+        //                                   color: Colors.white,
+        //                                   fontSize: 15,
+        //                                   fontFamily: 'Inter',
+        //                                   fontWeight: FontWeight.w600,
+        //                                 ),
+        //                               ),
+        //                               Text(
+        //                                 'View',
+        //                                 textAlign: TextAlign.right,
+        //                                 style: TextStyle(
+        //                                   color: Colors.white,
+        //                                   fontSize: 13,
+        //                                   fontFamily: 'Inter',
+        //                                   fontWeight: FontWeight.w500,
+        //                                 ),
+        //                               ),
+        //                             ],
+        //                           ),
+        //                         ),
+        //                         SizedBox(width: 20),
+        //                         Text(
+        //                           'Join room |  Join audio',
+        //                           textAlign: TextAlign.right,
+        //                           style: TextStyle(
+        //                             color: Colors.white,
+        //                             fontSize: 15,
+        //                             fontFamily: 'Inter',
+        //                             fontWeight: FontWeight.w500,
+        //                           ),
+        //                         ),
+        //                       ],
+        //                     ),
+        //                   ],
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //         barrierDismissible: false,
+        //         barrierColor: Colors.transparent,
+        //         // barrierLabel: ' Full Screen Dialog',
+        //         transitionDuration: const Duration(milliseconds: 400),
+        //       );
+      }
+    );
     donationcontroller.init(meetingdetails, token, roomdetails);
 
     // Cancel any existing subscription
-    _subscription ??= bigbluebuttonsdkPlugin.stream.listen((event) async {
-      var response = jsonDecode(event);
-      switch (response["collection"]) {
-        case "current-user":
-          if (response["msg"] == "removed" ||
-              (response["msg"] == "changed" &&
-                  response["fields"] != null &&
-                  response["fields"]["loggedOut"] != null &&
-                  response["fields"]["loggedOut"])) {
-            isleaving = true;
-            stage = 0;
-            Navigator.pop(context, isleaving);
-          }
-          break;
-        case "meetings":
-          if (response["msg"] == "changed" &&
-              response["fields"] != null &&
-              response["fields"]["meetingEnded"] != null &&
-              response["fields"]["meetingEnded"]) {
-            isleaving = true;
-            stage = 0;
-            // I/flutter ( 4834): {"msg":"changed","collection":"meetings","id":"L8HtzS6oxEDBqtMCg","fields":{"meetingEnded":true,"meetingEndedBy":"w_tanfjizh3aep","meetingEndedReason":"ENDED_AFTER_USER_LOGGED_OUT"}}
-            Navigator.pop(context, isleaving);
-          }
-          break;
-        case "external-video-meetings":
-          print("external-video-meetings");
-          print(response);
-          if (response["msg"] == "added" || response["msg"] == "changed") {
-            if (response["fields"] != null &&
-                response["fields"]["externalVideoUrl"] != null) {
-              showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) => ShowVideoScreen(
-                  videoLink: response,
-                  ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
-                ),
-              );
-            } else if (response["fields"] != null &&
-                response["fields"]["externalVideoUrl"] == null) {
-              Get.back();
-            }
-          } else if (response["msg"] == "removed") {
-            Get.back();
-          }
-          break;
-        case "polls":
-          if (response["msg"] == "added") {
-            final currentId = response["id"];
-            if (!pullcontroller.ispulling &&
-                currentId != pullcontroller.lastPollId) {
-              pullcontroller.ispulling = true;
-              pullcontroller.lastPollId = currentId;
-              showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) =>
-                    Pullquestionandanswer(json: response),
-              );
-            }
-          } else if (response["msg"] == "removed") {
-            pullcontroller.ispulling = false;
-            pullcontroller.lastPollId = "";
-          }
-          break;
-        case "current-poll":
-          if (response["msg"] == "added") {
-            pullcontroller.pullresult = response;
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) => Pollsresult(json: response),
-            ).then((value) {
-              Future.delayed(const Duration(seconds: 3), () {
-                pullcontroller.pullresult = {};
-              });
-            });
-          } else {}
-          break;
-        case "breakouts":
-          Get.dialog(
-            Scaffold(
-              // backgroundColor: const Color.fromRGBO(0, 0, 0, 0.76),
-              body: Center(
-                child: Container(
-                  width: 360,
-                  height: 664,
-                  decoration: const BoxDecoration(
-                    color: Color.fromRGBO(62, 132, 102, 1),
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'DURATIONS',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                            height: 0.08,
-                            letterSpacing: 0.10,
-                          ),
-                        ),
-                        Container(
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                width: 1,
-                                color: Color(0xFF5D957E),
-                              ),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                '14:39',
-                                style: TextStyle(
-                                  color: Colors.white.withOpacity(
-                                    0.9800000190734863,
-                                  ),
-                                  fontSize: 30,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w500,
-                                  height: 0.02,
-                                  letterSpacing: 0.10,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Room 1 (0)',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Text(
-                                    'View',
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            Text(
-                              'Join room |  Join audio',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            barrierDismissible: false,
-            barrierColor: Colors.transparent,
-            // barrierLabel: ' Full Screen Dialog',
-            transitionDuration: const Duration(milliseconds: 400),
-          );
-          break;
-
-        default:
-          // print("default response");
-          // print(json);
-          break;
-      }
-    });
+    // _subscription ??= bigbluebuttonsdkPlugin.stream.listen((event) async {
+    //   var response = jsonDecode(event);
+    //   switch (response["collection"]) {
+    //     case "current-user":
+    //       if (response["msg"] == "removed" ||
+    //           (response["msg"] == "changed" &&
+    //               response["fields"] != null &&
+    //               response["fields"]["loggedOut"] != null &&
+    //               response["fields"]["loggedOut"])) {
+    //         isleaving = true;
+    //         stage = 0;
+    //         Navigator.pop(context, isleaving);
+    //       }
+    //       break;
+    //     case "meetings":
+    //       if (response["msg"] == "changed" &&
+    //           response["fields"] != null &&
+    //           response["fields"]["meetingEnded"] != null &&
+    //           response["fields"]["meetingEnded"]) {
+    //         isleaving = true;
+    //         stage = 0;
+    //         // I/flutter ( 4834): {"msg":"changed","collection":"meetings","id":"L8HtzS6oxEDBqtMCg","fields":{"meetingEnded":true,"meetingEndedBy":"w_tanfjizh3aep","meetingEndedReason":"ENDED_AFTER_USER_LOGGED_OUT"}}
+    //         Navigator.pop(context, isleaving);
+    //       }
+    //       break;
+    //     case "external-video-meetings":
+    //       print("external-video-meetings");
+    //       print(response);
+    //       if (response["msg"] == "added" || response["msg"] == "changed") {
+    //         if (response["fields"] != null &&
+    //             response["fields"]["externalVideoUrl"] != null) {
+    //           showDialog(
+    //             barrierDismissible: false,
+    //             context: context,
+    //             builder: (BuildContext context) => ShowVideoScreen(
+    //               videoLink: response,
+    //               ishowecinema: bigbluebuttonsdkPlugin.ishowecinema,
+    //             ),
+    //           );
+    //         } else if (response["fields"] != null &&
+    //             response["fields"]["externalVideoUrl"] == null) {
+    //           // Get.back();
+    //         }
+    //       } else if (response["msg"] == "removed") {
+    //         Get.back();
+    //       }
+    //       break;
+    //     case "polls":
+    //       if (response["msg"] == "added") {
+    //         final currentId = response["id"];
+    //         if (!pullcontroller.ispulling &&
+    //             currentId != pullcontroller.lastPollId) {
+    //           pullcontroller.ispulling = true;
+    //           pullcontroller.lastPollId = currentId;
+    //           showDialog(
+    //             barrierDismissible: false,
+    //             context: context,
+    //             builder: (BuildContext context) =>
+    //                 Pullquestionandanswer(json: response),
+    //           );
+    //         }
+    //       } else if (response["msg"] == "removed") {
+    //         pullcontroller.ispulling = false;
+    //         pullcontroller.lastPollId = "";
+    //       }
+    //       break;
+    //     case "current-poll":
+    //       if (response["msg"] == "added") {
+    //         pullcontroller.pullresult = response;
+    //         showDialog(
+    //           barrierDismissible: false,
+    //           context: context,
+    //           builder: (BuildContext context) => Pollsresult(json: response),
+    //         ).then((value) {
+    //           Future.delayed(const Duration(seconds: 3), () {
+    //             pullcontroller.pullresult = {};
+    //           });
+    //         });
+    //       } else {}
+    //       break;
+    //     case "breakouts":
+    //       Get.dialog(
+    //         Scaffold(
+    //           // backgroundColor: const Color.fromRGBO(0, 0, 0, 0.76),
+    //           body: Center(
+    //             child: Container(
+    //               width: 360,
+    //               height: 664,
+    //               decoration: const BoxDecoration(
+    //                 color: Color.fromRGBO(62, 132, 102, 1),
+    //                 borderRadius: BorderRadius.all(Radius.circular(16)),
+    //               ),
+    //               child: Padding(
+    //                 padding: const EdgeInsets.symmetric(horizontal: 25),
+    //                 child: Column(
+    //                   // mainAxisAlignment: MainAxisAlignment.spaceAround,
+    //                   children: [
+    //                     Text(
+    //                       'DURATIONS',
+    //                       style: TextStyle(
+    //                         color: Colors.white,
+    //                         fontSize: 16,
+    //                         fontFamily: 'Inter',
+    //                         fontWeight: FontWeight.w500,
+    //                         height: 0.08,
+    //                         letterSpacing: 0.10,
+    //                       ),
+    //                     ),
+    //                     Container(
+    //                       decoration: ShapeDecoration(
+    //                         shape: RoundedRectangleBorder(
+    //                           side: BorderSide(
+    //                             width: 1,
+    //                             color: Color(0xFF5D957E),
+    //                           ),
+    //                           borderRadius: BorderRadius.circular(5),
+    //                         ),
+    //                       ),
+    //                       child: Row(
+    //                         mainAxisSize: MainAxisSize.min,
+    //                         mainAxisAlignment: MainAxisAlignment.center,
+    //                         crossAxisAlignment: CrossAxisAlignment.center,
+    //                         children: [
+    //                           Text(
+    //                             '14:39',
+    //                             style: TextStyle(
+    //                               color: Colors.white.withOpacity(
+    //                                 0.9800000190734863,
+    //                               ),
+    //                               fontSize: 30,
+    //                               fontFamily: 'Inter',
+    //                               fontWeight: FontWeight.w500,
+    //                               height: 0.02,
+    //                               letterSpacing: 0.10,
+    //                             ),
+    //                           ),
+    //                         ],
+    //                       ),
+    //                     ),
+    //                     Row(
+    //                       children: [
+    //                         Expanded(
+    //                           child: Column(
+    //                             children: [
+    //                               Text(
+    //                                 'Room 1 (0)',
+    //                                 style: TextStyle(
+    //                                   color: Colors.white,
+    //                                   fontSize: 15,
+    //                                   fontFamily: 'Inter',
+    //                                   fontWeight: FontWeight.w600,
+    //                                 ),
+    //                               ),
+    //                               Text(
+    //                                 'View',
+    //                                 textAlign: TextAlign.right,
+    //                                 style: TextStyle(
+    //                                   color: Colors.white,
+    //                                   fontSize: 13,
+    //                                   fontFamily: 'Inter',
+    //                                   fontWeight: FontWeight.w500,
+    //                                 ),
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                         SizedBox(width: 20),
+    //                         Text(
+    //                           'Join room |  Join audio',
+    //                           textAlign: TextAlign.right,
+    //                           style: TextStyle(
+    //                             color: Colors.white,
+    //                             fontSize: 15,
+    //                             fontFamily: 'Inter',
+    //                             fontWeight: FontWeight.w500,
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //             ),
+    //           ),
+    //         ),
+    //         barrierDismissible: false,
+    //         barrierColor: Colors.transparent,
+    //         // barrierLabel: ' Full Screen Dialog',
+    //         transitionDuration: const Duration(milliseconds: 400),
+    //       );
+    //       break;
+    //
+    //     default:
+    //       // print("default response");
+    //       // print(json);
+    //       break;
+    //   }
+    // });
   }
 
   final floating = Floating();

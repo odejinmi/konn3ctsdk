@@ -101,7 +101,7 @@ class BottomNav extends GetView<postjoinController> {
                   ),
                 ),
               InkWell(
-                onTap: () {
+                onTap: () async {
                   if (websocket
                           .meetingResponse
                           ?.fields
@@ -118,20 +118,17 @@ class BottomNav extends GetView<postjoinController> {
                     );
                     return;
                   }
-                  controller.ismuted = !controller.ismuted;
-                  controller.bigbluebuttonsdkPlugin.mutemyself();
+                  var result = await controller.bigbluebuttonsdkPlugin.mutemyself();
+                  if (result["msg"] == "updated" || result["msg"] == "result"){
+                    controller.ismuted = !controller.ismuted;
+                  }
                 },
                 child: Container(
                   padding: EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.white),
                     color:
-                        controller
-                                .bigbluebuttonsdkPlugin
-                                .mydetails
-                                ?.fields
-                                ?.muted ==
-                            true
+                        controller.ismuted
                         ? Color(0xffCC525F)
                         : Color(0xff3E8466),
                     borderRadius: BorderRadius.circular(50),

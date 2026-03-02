@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 import 'advanced_you_tube_player.dart';
 
@@ -132,7 +131,6 @@ class ShowVideoScreen extends StatefulWidget {
 }
 
 class _ShowVideoScreenState extends State<ShowVideoScreen> {
-  late YoutubePlayerController _controller; // Youtube player controller
 
   bool isFullscreen = true; // Default to landscape mode
 
@@ -151,16 +149,6 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: YoutubePlayer.convertUrlToId(
-        widget.videoLink["fields"]["externalVideoUrl"],
-      )!,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-        controlsVisibleAtStart: true,
-      ),
-    );
     // Usage
     videoId = YouTubeHelper.extractVideoId(
       widget.videoLink["fields"]["externalVideoUrl"],
@@ -234,7 +222,6 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -328,7 +315,6 @@ class _ShowVideoScreenState extends State<ShowVideoScreen> {
                             /// End eCinema Button
                             GestureDetector(
                               onTap: () {
-                                _controller.pause();
 
                                 // _enableFullscreen(true);
                                 Navigator.pop(context);

@@ -320,8 +320,10 @@ class _DrawerCompState extends State<DrawerComp> {
                       ),
                     ),
                     iconColor: Colors.white,
-                    onTap: () {
-                      postjoincontroller.bigbluebuttonsdkPlugin.muteallusers();
+                    onTap: () async {
+                      var response = await postjoincontroller.bigbluebuttonsdkPlugin.muteallusers();
+                      print("mute all response");
+                      print(response);
                       Navigator.pop(context);
                     },
                   ),

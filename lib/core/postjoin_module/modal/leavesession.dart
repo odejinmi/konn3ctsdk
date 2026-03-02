@@ -101,10 +101,10 @@ class Leavesession extends StatelessWidget {
                   const SizedBox(width: 10),
                   Expanded(
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
                         Navigator.pop(context);
                         logic.isleaving = true;
-                        logic.bigbluebuttonsdkPlugin.leaveroom();
+                        var result = await logic.bigbluebuttonsdkPlugin.leaveroom();
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),

@@ -3,6 +3,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:konn3ctsdk/core/postjoin_module/postjoin_controller.dart';
 import 'package:lottie/lottie.dart';
 
@@ -347,7 +348,7 @@ class _ChatDialogState extends State<ChatDialog> {
                         style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(width: 10),
-                      Text('2:12 PM', style: TextStyle(color: Colors.white)),
+                      Text(DateFormat('hh:mm a').format(DateTime.fromMillisecondsSinceEpoch(message.timestamp)), style: TextStyle(color: Colors.white)),
                     ],
                   ),
                   IconButton(

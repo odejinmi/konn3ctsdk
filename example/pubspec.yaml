@@ -42,7 +42,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
-  cryptography: ^2.7.0
+  cryptography: ^2.9.0
   encrypt: ^5.0.3
 
 

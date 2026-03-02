@@ -9,7 +9,7 @@ class Makedonation extends GetView<DonationController> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Container(
+      return SingleChildScrollView(
         child: Form(
           key: controller.formKey,
           child: Column(
@@ -234,6 +234,7 @@ class Makedonation extends GetView<DonationController> {
                               }
                               return null;
                             },
+                            keyboardType: TextInputType.phone ,
                             controller: controller.donationamountController,
                             style: TextStyle(
                               color: Colors.white,
