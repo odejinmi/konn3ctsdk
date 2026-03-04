@@ -632,7 +632,7 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
 
   void uploadpresentation(String token) async {
     var cmddetails = await Diorequest().post(
-      "https://meet.konn3ct.ng/bigbluebutton/presentation/$token/upload",
+      "https://$baseurl/bigbluebutton/presentation/$token/upload",
       {
         "conference": "9753e686f0a75399ca60ae03442353b4b7862ee2-1729497404190",
         "room": "9753e686f0a75399ca60ae03442353b4b7862ee2-1729497404190",

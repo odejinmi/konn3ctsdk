@@ -5,7 +5,8 @@
 String home = 'Home';
 // String baseurl = 'meet1.konn3ct.com/';
 // String apibaseurl = 'https://konn3ct.com/api/';
-String url = 'https://dev.konn3ct.ng/';
+// String url = 'https://dev.konn3ct.ng/';  //dev
+String url = 'https://konn3ct.com/';  //live
 String apibaseurl = '${url}api/';
 // String token = "1075|v7DDQRBn0s5ri6p7KrAP2xBjsoB2UpIlHXnaNtyZ";
 void logLongText(String text, {int chunkSize = 1000}) {
