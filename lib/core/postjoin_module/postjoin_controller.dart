@@ -36,7 +36,8 @@ class postjoinController extends GetxController with WidgetsBindingObserver {
   set context(value) => _context.value = value;
   get context => _context.value;
 
-  final _baseurl = 'meet.konn3ct.ng/'.obs;
+  // final _baseurl = 'meet.konn3ct.ng/'.obs; //dev
+  final _baseurl = 'meet4.konn3ct.com/'.obs;  //live
   set baseurl(value) {
     entermeetingurl = 'https://${value}bigbluebutton/api/enter?sessionToken=';
     return _baseurl.value = value;
