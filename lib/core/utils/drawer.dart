@@ -116,8 +116,8 @@ class _DrawerCompState extends State<DrawerComp> {
                         if (logic
                                 .meetingResponse
                                 ?.fields
-                                .lockSettingsProps
-                                .disablePublicChat ??
+                                ?.lockSettingsProps
+                                ?.disablePublicChat ??
                             false) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

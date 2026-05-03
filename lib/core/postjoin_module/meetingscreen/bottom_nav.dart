@@ -105,8 +105,8 @@ class BottomNav extends GetView<postjoinController> {
                   if (websocket
                           .meetingResponse
                           ?.fields
-                          .lockSettingsProps
-                          .disableMic ??
+                          ?.lockSettingsProps
+                          ?.disableMic ??
                       false) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -151,8 +151,8 @@ class BottomNav extends GetView<postjoinController> {
                   if (websocket
                           .meetingResponse
                           ?.fields
-                          .lockSettingsProps
-                          .disableCam ??
+                          ?.lockSettingsProps
+                          ?.disableCam ??
                       false) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

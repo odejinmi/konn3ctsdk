@@ -184,11 +184,6 @@ class Pullquestionandanswer extends StatelessWidget {
                                   .mydetails!
                                   .fields!
                                   .presenter!) {
-                              } else {
-                                postjoincontroller
-                                        .bigbluebuttonsdkPlugin
-                                        .ispolling =
-                                    false;
                               }
                             }
                           },

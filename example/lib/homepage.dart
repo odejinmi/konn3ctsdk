@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:cryptography/cryptography.dart';
-import 'package:encrypt/encrypt.dart' as encrypt;
+// import 'package:cryptography/cryptography.dart';
+// import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:konn3ctsdk/konn3ctsdk.dart';
@@ -97,39 +97,39 @@ class _HomepageState extends State<Homepage> {
   }
 
   // AES-GCM with 256-bit key
-  final algorithm = AesGcm.with256bits();
-  Future<void> startEncryption() async {
-    // AES-256 requires a 32-byte key
-    final keyBytes = utf8.encode('BaVkxaDFoNzI2U0FHa2o1OTJ2aytEeVY');
-    final secretKey = SecretKey(keyBytes);
-
-    // Generate a 12-byte random IV (nonce)
-    final nonce = algorithm.newNonce(); // 12-byte random nonce
-
-    // The message you want to encrypt
-    final message = utf8.encode('Hello from Flutter with AES-256-GCM!');
-
-    // Encrypt
-    final secretBox = await algorithm.encrypt(
-      message,
-      secretKey: secretKey,
-      nonce: nonce,
-    );
-
-    // Build JSON structure similar to Laravel
-    final jsonResult = {
-      "iv": base64Encode(secretBox.nonce), // 12-byte IV
-      "value": base64Encode(secretBox.cipherText), // ciphertext
-      "mac": "", // Laravel leaves empty for GCM
-      "tag": base64Encode(secretBox.mac.bytes), // 16-byte tag
-    };
-
-    print(jsonEncode(jsonResult));
-
-    // --- Decrypt to verify ---
-    // final decrypted = await algorithm.decrypt(secretBox, secretKey: secretKey);
-    // print('Decrypted: ${utf8.decode(decrypted)}');
-  }
+  // final algorithm = AesGcm.with256bits();
+  // Future<void> startEncryption() async {
+  //   // AES-256 requires a 32-byte key
+  //   final keyBytes = utf8.encode('BaVkxaDFoNzI2U0FHa2o1OTJ2aytEeVY');
+  //   final secretKey = SecretKey(keyBytes);
+  //
+  //   // Generate a 12-byte random IV (nonce)
+  //   final nonce = algorithm.newNonce(); // 12-byte random nonce
+  //
+  //   // The message you want to encrypt
+  //   final message = utf8.encode('Hello from Flutter with AES-256-GCM!');
+  //
+  //   // Encrypt
+  //   final secretBox = await algorithm.encrypt(
+  //     message,
+  //     secretKey: secretKey,
+  //     nonce: nonce,
+  //   );
+  //
+  //   // Build JSON structure similar to Laravel
+  //   final jsonResult = {
+  //     "iv": base64Encode(secretBox.nonce), // 12-byte IV
+  //     "value": base64Encode(secretBox.cipherText), // ciphertext
+  //     "mac": "", // Laravel leaves empty for GCM
+  //     "tag": base64Encode(secretBox.mac.bytes), // 16-byte tag
+  //   };
+  //
+  //   print(jsonEncode(jsonResult));
+  //
+  //   // --- Decrypt to verify ---
+  //   // final decrypted = await algorithm.decrypt(secretBox, secretKey: secretKey);
+  //   // print('Decrypted: ${utf8.decode(decrypted)}');
+  // }
 
   decryptData() async {
     var data =
@@ -161,26 +161,26 @@ class _HomepageState extends State<Homepage> {
   // }
 }
 
-class AESHelper {
-  final encrypt.Key key;
-
-  AESHelper(String base64Key) : key = encrypt.Key.fromBase64(base64Key);
-
-  String encryptText(String plainText, String ivBase64) {
-    final iv = encrypt.IV.fromBase64(ivBase64);
-    final encrypter = encrypt.Encrypter(
-      encrypt.AES(key, mode: encrypt.AESMode.gcm),
-    );
-    final encrypted = encrypter.encrypt(plainText, iv: iv);
-    return encrypted.base64;
-  }
-
-  String decryptText(String cipherText, String ivBase64) {
-    final iv = encrypt.IV.fromBase64(ivBase64);
-    final encrypter = encrypt.Encrypter(
-      encrypt.AES(key, mode: encrypt.AESMode.gcm),
-    );
-    final decrypted = encrypter.decrypt64(cipherText, iv: iv);
-    return decrypted;
-  }
-}
+// class AESHelper {
+//   final encrypt.Key key;
+//
+//   AESHelper(String base64Key) : key = encrypt.Key.fromBase64(base64Key);
+//
+//   String encryptText(String plainText, String ivBase64) {
+//     final iv = encrypt.IV.fromBase64(ivBase64);
+//     final encrypter = encrypt.Encrypter(
+//       encrypt.AES(key, mode: encrypt.AESMode.gcm),
+//     );
+//     final encrypted = encrypter.encrypt(plainText, iv: iv);
+//     return encrypted.base64;
+//   }
+//
+//   String decryptText(String cipherText, String ivBase64) {
+//     final iv = encrypt.IV.fromBase64(ivBase64);
+//     final encrypter = encrypt.Encrypter(
+//       encrypt.AES(key, mode: encrypt.AESMode.gcm),
+//     );
+//     final decrypted = encrypter.decrypt64(cipherText, iv: iv);
+//     return decrypted;
+//   }
+// }

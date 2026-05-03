@@ -221,7 +221,7 @@ class Presentation extends GetView<PresentationController> {
                 SizedBox(height: 20),
                 InkWell(
                   onTap: () async {
-                    FilePickerResult? result = await FilePicker.platform
+                    FilePickerResult? result = await FilePicker
                         .pickFiles(
                           allowMultiple: true,
                           type: FileType.custom,

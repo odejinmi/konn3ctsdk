@@ -180,8 +180,8 @@ class ParticipantsDialog extends GetView<ParticipantController> {
                                     if (logic
                                             .meetingResponse
                                             ?.fields
-                                            .lockSettingsProps
-                                            .disablePrivateChat ??
+                                            ?.lockSettingsProps
+                                            ?.disablePrivateChat ??
                                         false) {
                                       ScaffoldMessenger.of(
                                         context,

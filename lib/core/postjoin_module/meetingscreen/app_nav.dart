@@ -268,8 +268,8 @@ class AppNav extends GetView<postjoinController>
                 if (logic
                         .meetingResponse
                         ?.fields
-                        .lockSettingsProps
-                        .hideUserList ??
+                        ?.lockSettingsProps
+                        ?.hideUserList ??
                     false) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
