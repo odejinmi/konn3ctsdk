@@ -7,7 +7,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   emoji_picker_flutter
   flutter_webrtc
   konn3ctsdk
-  open_file_linux
   record_linux
   screen_capturer_linux
   url_launcher_linux
