@@ -68,7 +68,9 @@ class DeviceSettingsController extends GetxController
     // }
 
     // if(bigbluebuttonsdkPlugin.getAvailableMicrophones.isEmpty) return;
-    firstDropdownValue = firstItemsDropdown.first;
+    if (firstItemsDropdown.isNotEmpty) {
+      firstDropdownValue = firstItemsDropdown.first;
+    }
   }
 
   void getAvailableMicrophones() async {
@@ -79,7 +81,9 @@ class DeviceSettingsController extends GetxController
     //   print('Microphone: ${device.label} (${device.deviceId})');
     // }
     // if(bigbluebuttonsdkPlugin.getAvailableMicrophones.isEmpty) return;
-    thirdDropdownValue = thirdItemsDropdown.first;
+    if (thirdItemsDropdown.isNotEmpty) {
+      thirdDropdownValue = thirdItemsDropdown.first;
+    }
   }
 
   void getAvailableSpeakers() async {
@@ -90,6 +94,8 @@ class DeviceSettingsController extends GetxController
     //   print('Microphone: ${device.label} (${device.deviceId})');
     // }
     // if(bigbluebuttonsdkPlugin.getAvailableMicrophones.isEmpty) return;
-    forthDropdownValue = forthItemsDropdown.first;
+    if (forthItemsDropdown.isNotEmpty) {
+      forthDropdownValue = forthItemsDropdown.first;
+    }
   }
 }
